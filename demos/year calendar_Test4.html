@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario Anual con jsCalendar</title>
+    <!-- jsCalendar -->
+    <link rel="stylesheet" type="text/css" href="../source/jsCalendar.css">
+    <link rel="stylesheet" type="text/css" href="../themes/jsCalendar.clean.css">
+    <script type="text/javascript" src="../source/jsCalendar.js"></script>
+    <style>
+        #yearly-calendar-container {
+            padding: 20px;
+        }
+
+        .jsCalendar {
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .jsCalendar-title {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .jsCalendar-week-days {
+            text-align: center;
+        }
+
+        .jsCalendar tbody td {
+            text-align: center;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ejemplos de Calendario Anual con jsCalendar</h1>
+
+    <h2>Ejemplo 1: Renderizado Automático</h2>
+    <div id="yearly-calendar-auto"></div>
+
+    <h2>Ejemplo 2: 3 Columnas Fijas</h2>
+    <div id="yearly-calendar-3-columns"></div>
+
+    <script>
+        function createYearlyCalendar(config = {}) {
+            const container = document.getElementById(config.containerId);
+            container.innerHTML = ''; // Limpiar el contenedor
+
+            const monthsPerRow = config.monthsPerRow || 3; // 3 meses por fila por defecto
+            const totalMonths = 12;
+            const containerWidth = container.clientWidth;
+            const calendarWidth = Math.floor(containerWidth / monthsPerRow) - 20; // Ajustar el tamaño con margen
+
+            container.style.display = "grid";
+            container.style.gridTemplateColumns = 'repeat(${monthsPerRow}, 1fr)';
+            container.style.gridGap = "10px";
+
+            for (let i = 0; i < totalMonths; i++) {
+                const calendarDiv = document.createElement('div');
+                calendarDiv.style.width = '${calendarWidth}px';
+                calendarDiv.style.margin = "10px";
+                container.appendChild(calendarDiv);
+
+                const calendar = jsCalendar.new({
+                    target: calendarDiv,
+                    date: new Date(new Date().getFullYear(), i, 1), // Set month (i) and year (current year)
+                    options: {
+                        navigator: false, // Desactivar la navegación si no es necesaria
+                        zeroFill: true, // Para rellenar con ceros los días si es necesario
+                        dayFormat: 'DD', // Asegura el formato de dos dígitos para los días
+                        monthFormat: 'MONTH YYYY', // Formato claro para el mes y año
+                    }
+                });
+
+                // Asegurarnos de que se muestren siempre 6 filas, para que todos los días estén visibles
+                const tbody = calendarDiv.querySelector('tbody');
+                const rows = tbody.querySelectorAll('tr');
+                if (rows.length < 6) {
+                    for (let j = rows.length; j < 6; j++) {
+                        const row = document.createElement('tr');
+                        for (let k = 0; k < 7; k++) { // 7 días de la semana
+                            const cell = document.createElement('td');
+                            row.appendChild(cell);
+                        }
+                        tbody.appendChild(row);
+                    }
+                }
+            }
+        }
+
+        function createYearlyCalendarAuto(containerId) {
+            const container = document.getElementById(containerId);
+            const totalMonths = 12;
+            const calendarWidth = 200; // Ancho por defecto de cada calendario
+            const monthsPerRow = Math.floor(container.clientWidth / calendarWidth);
+
+            createYearlyCalendar({ containerId, monthsPerRow });
+        }
+
+        // Renderizado Automático
+        createYearlyCalendarAuto('yearly-calendar-auto');
+
+        // Renderizado con 3 Columnas Fijas
+        createYearlyCalendar({ containerId: 'yearly-calendar-3-columns', monthsPerRow: 3 });
+    </script>
+</body>
+</html>
+        

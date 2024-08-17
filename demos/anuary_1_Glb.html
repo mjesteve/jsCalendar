@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario Anual con jsCalendar</title>
+    <!-- jsCalendar -->
+    <link rel="stylesheet" type="text/css" href="../source/jsCalendar.css">
+    <link rel="stylesheet" type="text/css" href="../themes/jsCalendar.clean.css">
+    <link rel="stylesheet" type="text/css" href="../source/jsCalendarAnuario.css">
+    <script type="text/javascript" src="../source/jsCalendar.js"></script>
+    <script type="text/javascript" src="../source/jsCalendarAnuarioGlb.js"></script>
+    
+</head>
+<body>
+
+    <h1>Calendario Anual</h1>
+
+    <div id="yearly-calendar-container" class="jsCalendarAnuario-container"></div>
+
+    <script>
+        // Inicializar el anuario en un contenedor específico, para el año 2025
+        const anuario2025 = new jsCalendarAnuarioGlb('yearly-calendar-container', {
+            year: 2025, // Especificar el año
+            monthsPerRow: 4, // 4 meses por fila
+            calendarWidth: 300, // Ancho mínimo de 300px
+            autoResponsive: true // Ajuste automático en pantallas pequeñas
+        });
+    </script>
+</body>
+</html>

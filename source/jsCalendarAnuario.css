@@ -1,0 +1,42 @@
+/* Estilos para el contenedor principal del anuario */
+.jsCalendarAnuario-container {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive grid */
+    grid-gap: 10px;
+}
+
+/* Estilos generales para cada calendario */
+.jsCalendar {
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Asegura que la tabla dentro del calendario se vea correctamente */
+.jsCalendar table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+/* Título del calendario */
+.jsCalendar-title {
+    text-align: center;
+    font-weight: bold;
+    padding: 10px 0;
+}
+
+/* Estilos para los días de la semana y los días del mes */
+.jsCalendar-week-days th, .jsCalendar tbody td {
+    padding: 5px;
+    text-align: center;
+}
+
+/* Estilos responsivos para pantallas pequeñas */
+@media (max-width: 600px) {
+    .jsCalendarAnuario-container {
+        grid-template-columns: repeat(auto-fill, minmax(100%, 1fr)); /* Un calendario por fila en pantallas pequeñas */
+    }
+}

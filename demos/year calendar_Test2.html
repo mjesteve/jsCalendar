@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,maximum-scale=1.0">
+		<title>jsCalendar Demo</title>
+		<meta name="description" content="jsCalendar demo - year calendar">
+		<meta name="author" content="GramThanos">
+
+		<!-- jsCalendar -->
+		<link rel="stylesheet" type="text/css" href="../source/jsCalendar.css">
+		<link rel="stylesheet" type="text/css" href="../themes/jsCalendar.clean.css">
+		<script type="text/javascript" src="../source/jsCalendar.js"></script>
+
+		<!--[if lt IE 9]>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+		<![endif]-->
+		
+		<!-- Demo Style -->
+		<style>
+			html, body {
+				font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+			}
+			.description {
+				padding-bottom: 40px;
+				text-align: left;
+				width: 970px;
+				margin: 0 auto;
+			}
+			#year-calendar {
+				width: 1030px;
+				text-align: center;
+				margin: 0 auto;
+			}
+			#year-calendar .year-title {
+				padding: 10px 32px;
+				font-size: 36px;
+				text-align: left;
+			}
+			#year-calendar .jsCalendar {
+				display : inline-block;
+			}
+			#year-calendar .jsCalendar-previous,
+			#year-calendar .jsCalendar-next {
+				opacity: 0.6;
+				color: #888888;
+			}
+			.version {
+				font-size: 10px;
+				opacity: 0.6;
+				text-align: right;
+				width: 970px;
+				margin: 0 auto;
+				padding-top: 20px;
+			}
+			@media print {
+				html, body {
+					width: 100%;
+					height: 100%;
+				}
+				body {
+					zoom: 62%;
+				}
+				.description {
+					display: none;
+				}
+				@page {
+					size: A4 Portrait;
+					max-height: 100%;
+					max-width: 100%;
+				}
+			}
+			.annual-calendar {
+				display: grid;
+				grid-template-columns: repeat(4, 1fr);
+				gap: 10px;
+			}
+
+			.month-calendar {
+				border: 1px solid #ccc;
+				padding: 10px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="description">
+			<div style="font-size: 1.4em;">Year calendar</div>
+			<div>Demo full year calendar using jsCalendar</div>
+			<div style="font-size: 0.75em;">Try to print it [Ctrl+P]</div>
+		</div>
+
+		<!-- Full Calendar wrapper -->
+		<div id="yearly-calendar-container" style="display: flex; flex-wrap: wrap;">
+		</div>
+
+		<!-- Example Extensions Load before creating calendars-->
+		<script type="text/javascript">
+			(function($){
+				// Check if jsCalendar exists
+				if (!$) throw 'Error jsCalendar library was not found';
+
+				var addDateOnElement = function(element, date) {
+					element.setAttribute('date', String(date.getDate()).padStart(2, '0') + '/' + String(date.getMonth() + 1).padStart(2, '0') + '/' + String(date.getFullYear()));
+				};
+
+				// Instance Handlers
+				var update = function(instance, month) {
+					// Update days elements
+					for (var i = month.days.length - 1; i >= 0; i--) {
+						addDateOnElement(instance._elements.bodyCols[i], month.days[i]);
+					}
+				};
+
+				// Load extension
+				$.ext('custom-date-attribute', {update : update});
+			})(window.jsCalendar);
+		</script>
+		
+		<!-- Create the calendar -->
+		<script type="text/javascript">
+			// Asumiendo que el contenedor ya está en el DOM
+			const container = document.getElementById('yearly-calendar-container');
+
+			for (let i = 0; i < 12; i++) {
+				// Crear un div para cada calendario
+				const calendarDiv = document.createElement('div');
+				calendarDiv.style.margin = "10px";
+				calendarDiv.style.width = "200px"; // Ajustar según el diseño deseado
+				container.appendChild(calendarDiv);
+
+				// Crear una instancia de jsCalendar para cada mes
+				const calendar = jsCalendar.new({
+					target: calendarDiv,
+					date: new Date(new Date().getFullYear(), i, 1), // Set month (i) and year (current year)
+					options: {
+						navigator: false, // Desactivar la navegación si no es necesaria
+					}
+				});
+			}
+		</script>
+		
+		<div class="version">
+			jsCalendar <span id="jsCalendar-version"></span>
+		</div>
+		<script type="text/javascript">document.getElementById('jsCalendar-version').textContent = jsCalendar.version;</script>
+	</body>
+</html>
