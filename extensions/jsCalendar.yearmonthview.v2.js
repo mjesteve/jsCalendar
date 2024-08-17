@@ -3,80 +3,43 @@
     if (!$) throw 'Error: jsCalendar library was not found';
 
     // Constructor de YearMonthView
-    var YearMonthView = function() {
-        // Solo se inicializa si hay argumentos
-        if (arguments.length > 0) {
-            this._construct(arguments);
-        }
-    };
+    var YearMonthView = function(options) {
+        // Parsear las opciones
+        this._options = Object.assign({
+            year: new Date().getFullYear(), // Año que se mostrará
+            monthsPerRow: 3, // Número de meses por fila
+            calendarWidth: 300, // Ancho mínimo de cada calendario
+            autoResponsive: true // Ajuste automático en pantallas pequeñas
+        }, options);
 
-    // Versión
-    YearMonthView.version = 'v1.0.0';
-
-    // Opciones por defecto
-    YearMonthView.options = {
-        year: new Date().getFullYear(), // Año que se mostrará
-        monthsPerRow: 3, // Número de meses por fila
-        calendarWidth: 300, // Ancho mínimo de cada calendario
-        autoResponsive: true // Ajuste automático en pantallas pequeñas
-    };
-
-    // Sub-Constructor
-    YearMonthView.prototype._construct = function(args) {
-        // Parsear argumentos
-        args = this._parseArguments(args);
         // Configurar el contenedor
-        this._setTarget(args.target);
-        // Parsear opciones
-        var options = this._parseOptions(args.options);
+        this._setTarget(this._options.target);
         // Renderizar calendarios
         this.renderCalendars();
+
         // Configurar eventos de redimensionamiento si es auto-responsive
         if (this._options.autoResponsive) {
             window.addEventListener('resize', this.renderCalendars.bind(this));
         }
     };
+/* 
+    // Version
+    YearMonthView.version = 'v0.0.0';
 
-    // Parsear argumentos
-    YearMonthView.prototype._parseArguments = function(args) {
-        var obj = { target: null, options: {} };
-        if (args.length === 1) {
-            if (typeof args[0] === 'string' || args[0] instanceof HTMLElement) {
-                obj.target = args[0];
-            } else {
-                obj.options = args[0];
-                if (typeof args[0].target !== 'undefined') {
-                    obj.target = args[0].target;
-                } else {
-                    throw new Error('jsCalendarYearMonthView: No target was given.');
-                }
-            }
-        } else if (args.length >= 2) {
-            obj.target = args[0];
-            obj.options = args[1];
-        }
-        return obj;
-    };
+    // Options
+    YearMonthView.options = {
+        year: new Date().getFullYear(), // Año que se mostrará
+        monthsPerRow: 3, // Número de meses por fila
+        calendarWidth: 300, // Ancho mínimo de cada calendario
+        autoResponsive: true // Ajuste automático en pantallas pequeñas,
+    }; */
 
-    // Configurar el contenedor y añadir la clase automáticamente
+    // Configurar el contenedor
     YearMonthView.prototype._setTarget = function(target) {
         this._target = $.tools.getElement(target);
         if (!this._target) {
             throw new Error('jsCalendarYearMonthView: Target was not found.');
         }
-        // Añadir la clase 'jsCalendar-yearmonthview-container' al contenedor principal
-        this._target.classList.add('jsCalendar-yearmonthview-container');
-    };
-
-    // Parsear opciones
-    YearMonthView.prototype._parseOptions = function(doptions) {
-        this._options = {};
-        for (var item in YearMonthView.options) {
-            if (YearMonthView.options.hasOwnProperty(item)) {
-                this._options[item] = doptions[item] !== undefined ? doptions[item] : YearMonthView.options[item];
-            }
-        }
-        return this._options;
     };
 
     // Renderizar los calendarios
@@ -103,16 +66,15 @@
             calendarDiv.style.width = `${calendarWidth}px`;
             container.appendChild(calendarDiv);
 
-            // Filtrar las opciones de YearMonthView y pasar el resto a jsCalendar
-            const calendarOptions = Object.assign({}, this._options, {
+            const calendar = new $.new({
                 target: calendarDiv,
                 date: new Date(this._options.year, i, 1), // Establecer mes y año
-                navigator: false // Desactivar la navegación si está en las opciones generales
+                navigator: false, // Desactivar la navegación
+                zeroFill: true, // Rellenar con ceros los días si es necesario
+                dayFormat: 'DD', // Formato de dos dígitos para los días
+                monthFormat: 'MONTH YYYY' // Formato claro para el mes y año
             });
 
-            const calendar = new $.new(calendarOptions);
-
-            // Asegurar que se muestren siempre 6 filas, para que todos los días estén visibles
             const tbody = calendarDiv.querySelector('tbody');
             const rows = tbody.querySelectorAll('tr');
             if (rows.length < 6) {
@@ -135,13 +97,8 @@
     };
 
     // Registrar YearMonthView como una extensión de jsCalendar
-    $.yearmonthview = function() {
-        // Crear nuevo objeto
-        var obj = new YearMonthView();
-        // Construir yearmonthview
-        obj._construct(arguments);
-        // Devolver nuevo objeto
-        return obj;
+    $.yearmonthview = function(options) {
+        return new YearMonthView(options);
     };
 
     // Registrar YearMonthView en jsCalendar para integración más profunda

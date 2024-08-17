@@ -6,18 +6,17 @@
     <title>Vista Anual con jsCalendar.yearmonthview</title>
     <!-- jsCalendar -->
     <link rel="stylesheet" type="text/css" href="../../source/jsCalendar.css">
+    <link rel="stylesheet" type="text/css" href="../../themes/jsCalendar.clean.css">
     <link rel="stylesheet" type="text/css" href="../../extensions/jsCalendar.yearmonthview.css">
-    <link rel="stylesheet" type="text/css" href="../../themes/jsCalendar.micro.css">
     <script type="text/javascript" src="../../source/jsCalendar.js"></script>
-    <script type="text/javascript" src="../../extensions/jsCalendar.yearmonthview.js"></script>
-    <script type="text/javascript" src="../../source/jsCalendar.lang.es.js"></script>
+    <script type="text/javascript" src="../../extensions/jsCalendar.yearmonthview.ok.1.js"></script>
     
 </head>
 <body>
 
     <h1>Calendario Anual por Meses</h1>
 
-    <div id="yearly-calendar-container"></div>
+    <div id="yearly-calendar-container" class="jsCalendar-yearmonthview-container"></div>
 
     <script>
         // Inicializar el yearmonthview en un contenedor específico, para el año 2025
@@ -27,12 +26,6 @@
             monthsPerRow: 4, // 4 meses por fila
             calendarWidth: 300, // Ancho mínimo de 300px
             autoResponsive: true, // Ajuste automático en pantallas pequeñas
-                language: 'es',
-                navigator: false,
-                zeroFill: true,
-                monthFormat: 'MMM YYYY',
-                class : 'classic-theme micro-theme', // Especifica el tema "micro"
-                className : 'classic-theme micro-theme',
         });
         
     </script>

@@ -18,7 +18,8 @@
         year: new Date().getFullYear(), // Año que se mostrará
         monthsPerRow: 3, // Número de meses por fila
         calendarWidth: 300, // Ancho mínimo de cada calendario
-        autoResponsive: true // Ajuste automático en pantallas pequeñas
+        autoResponsive: true, // Ajuste automático en pantallas pequeñas
+        jsCalendarOptions: {} // Opciones adicionales para jsCalendar
     };
 
     // Sub-Constructor
@@ -58,14 +59,12 @@
         return obj;
     };
 
-    // Configurar el contenedor y añadir la clase automáticamente
+    // Configurar el contenedor
     YearMonthView.prototype._setTarget = function(target) {
         this._target = $.tools.getElement(target);
         if (!this._target) {
             throw new Error('jsCalendarYearMonthView: Target was not found.');
         }
-        // Añadir la clase 'jsCalendar-yearmonthview-container' al contenedor principal
-        this._target.classList.add('jsCalendar-yearmonthview-container');
     };
 
     // Parsear opciones
@@ -76,6 +75,8 @@
                 this._options[item] = doptions[item] !== undefined ? doptions[item] : YearMonthView.options[item];
             }
         }
+        // Mezclar las opciones específicas de jsCalendar
+        this._options.jsCalendarOptions = Object.assign({}, YearMonthView.options.jsCalendarOptions, doptions.jsCalendarOptions);
         return this._options;
     };
 
@@ -83,7 +84,7 @@
     YearMonthView.prototype.renderCalendars = function() {
         const container = this._target;
         if (!container) {
-            console.error(`Container with ID ${this._target} not found.`);
+            console.error('Container with ID ${this._target} not found.');
             return;
         }
 
@@ -94,21 +95,25 @@
         const monthsPerRow = this.calculateMonthsPerRow(containerWidth);
         const calendarWidth = Math.max(Math.floor(containerWidth / monthsPerRow) - 20, this._options.calendarWidth);
 
+        container.className = 'jsCalendar-yearmonthview-container';
         container.style.display = "grid";
-        container.style.gridTemplateColumns = `repeat(auto-fill, minmax(${calendarWidth}px, 1fr))`;
+        container.style.gridTemplateColumns = 'repeat(auto-fill, minmax(${calendarWidth}px, 1fr))';
         container.style.gridGap = "10px";
 
         for (let i = 0; i < totalMonths; i++) {
-            const calendarDiv = document.createElement('div');
-            calendarDiv.style.width = `${calendarWidth}px`;
-            container.appendChild(calendarDiv);
 
-            // Filtrar las opciones de YearMonthView y pasar el resto a jsCalendar
-            const calendarOptions = Object.assign({}, this._options, {
+            const calendarDiv = document.createElement('div');
+            calendarDiv.style.width = '${calendarWidth}px';
+
+            // Pasar las opciones de jsCalendar junto con la fecha específica de cada mes
+            const calendarOptions = Object.assign({}, this._options.jsCalendarOptions, {
                 target: calendarDiv,
                 date: new Date(this._options.year, i, 1), // Establecer mes y año
-                navigator: false // Desactivar la navegación si está en las opciones generales
+                navigator: false, // Desactivar la navegación si está en las opciones generales
             });
+            
+            calendarDiv.className = calendarOptions.class;
+            container.appendChild(calendarDiv);
 
             const calendar = new $.new(calendarOptions);
 
