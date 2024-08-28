@@ -53,12 +53,12 @@
             const calendarWidth = Math.floor(containerWidth / monthsPerRow) - 20; // Ajustar el tamaño con margen
 
             container.style.display = "grid";
-            container.style.gridTemplateColumns = 'repeat(${monthsPerRow}, 1fr)';
+            container.style.gridTemplateColumns = `repeat(${monthsPerRow}, 1fr)`;
             container.style.gridGap = "10px";
 
             for (let i = 0; i < totalMonths; i++) {
                 const calendarDiv = document.createElement('div');
-                calendarDiv.style.width = '${calendarWidth}px';
+                calendarDiv.style.width = `${calendarWidth}px`;
                 calendarDiv.style.margin = "10px";
                 container.appendChild(calendarDiv);
 

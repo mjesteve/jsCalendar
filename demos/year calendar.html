@@ -10,7 +10,11 @@
 		<!-- jsCalendar -->
 		<link rel="stylesheet" type="text/css" href="../source/jsCalendar.css">
 		<link rel="stylesheet" type="text/css" href="../themes/jsCalendar.clean.css">
+		<link rel="stylesheet" type="text/css" href="../themes/jsCalendar.medium.css">
+		<link rel="stylesheet" type="text/css" href="../themes/jsCalendar.micro.css">
+		<link rel="stylesheet" type="text/css" href="../themes/jsCalendar.darkseries.css">
 		<script type="text/javascript" src="../source/jsCalendar.js"></script>
+		<script type="text/javascript" src="../source/jsCalendar.lang.es.js"></script>
 
 		<!--[if lt IE 9]>
 			<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
@@ -28,7 +32,7 @@
 				margin: 0 auto;
 			}
 			#year-calendar {
-				width: 1030px;
+				width: 100%;
 				text-align: center;
 				margin: 0 auto;
 			}
@@ -151,13 +155,20 @@
 			for (var i = 0; i < 12; i++) {
 				// Create element
 				div = document.createElement("div");
-				div.className = "clean-theme";
+				//div.className = "clean-theme";
+				//div.className = "classic-theme";
+				//div.className = "material-theme";
+				//div.className = "medium-theme";
+				div.className = "black-theme";
+				//div.className = "material-theme medium-theme orange";
 				wrapper.appendChild(div);
+				
 				// Create month calender (we set the date to 0)
 				calendars.push(
 					jsCalendar.new(div, 0, {
+						language: 'es',
 						zeroFill : true,
-						navigator : false
+						navigator : false,
 					})
 				);
 				calendars[i].goto("01-" + ((i + 1 < 10) ? "0" : "") + (i + 1) + "-" + year);

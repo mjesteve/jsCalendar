@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0">
+    <title>Year Month Calendar Component</title>
+    
+    <!-- Cargar los estilos de jsCalendar -->
+    <link rel="stylesheet" type="text/css" href="../source/jsCalendar.css">
+    <link rel="stylesheet" type="text/css" href="../themes/jsCalendar.clean.css">
+    <link rel="stylesheet" type="text/css" href="../themes/jsCalendar.medium.css">
+    <link rel="stylesheet" type="text/css" href="../themes/jsCalendar.micro.css">
+    <link rel="stylesheet" type="text/css" href="../themes/jsCalendar.darkseries.css">
+    
+    <!-- Cargar el nuevo CSS para el componente jsCalendarYearMonth -->
+    <link rel="stylesheet" type="text/css" href="../source/jsCalendarYearMonth.css">
+    
+    <!-- Cargar los scripts de jsCalendar -->
+    <script type="text/javascript" src="../source/jsCalendar.js"></script>
+    <script type="text/javascript" src="../source/jsCalendar.lang.es.js"></script>
+    <script type="text/javascript" src="../source/jsCalendarYearMonth.js"></script>
+</head>
+<body>
+    <div>
+        <!-- Selector de año -->
+        <label for="year-selector">Selecciona el año:</label>
+        <select id="year-selector">
+            <option value="2023">2023</option>
+            <option value="2024" selected>2024</option>
+            <option value="2025">2025</option>
+            <option value="2026">2026</option>
+        </select>
+    </div>
+
+    <div id="year-calendar"></div>
+
+    <!-- Sobrescribir la extensión custom-date-attribute
+    <script type="text/javascript">
+        (function(window, jsCalendar) {
+            // Redefinir la extensión 'custom-date-attribute'
+            jsCalendar.ext('custom-date-attribute', {
+                update: function(instance, month) {
+                    for (var i = month.days.length - 1; i >= 0; i--) {
+                        var dayElement = instance._elements.bodyCols[i];
+                        var date = month.days[i];
+                        dayElement.setAttribute('date', 
+                            String(date.getDate()).padStart(2, '0') + '-' +
+                            String(date.getMonth() + 1).padStart(2, '0') + '-' +
+                            String(date.getFullYear())
+                        );
+                        // Cambia el estilo de las celdas del fin de semana
+                        if (date.getDay() === 0 || date.getDay() === 6) {
+                            dayElement.style.backgroundColor = '#ffeb3b'; // Fondo amarillo para fines de semana
+                        }
+                    }
+                }
+            });
+        })(window, jsCalendar);
+    </script> -->
+
+    <script type="text/javascript">
+        // Crear el calendario anual
+        var yearCalendar = new jsCalendarYearMonth(document.getElementById('year-calendar'), {
+            year: 2024,
+            theme: 'clean', // Cambia el tema según lo desees
+            language: 'es',
+            extensions: ['custom-date-attribute','custom-weekend-attribute']// Aplicar la extensión personalizada
+        });
+
+        // Actualizar el calendario cuando se cambia el año
+        document.getElementById('year-selector').addEventListener('change', function() {
+            var selectedYear = parseInt(this.value);
+            yearCalendar.updateYear(selectedYear);
+        });
+    </script>
+</body>
+</html>

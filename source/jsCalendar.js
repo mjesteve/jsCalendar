@@ -80,6 +80,8 @@ var jsCalendar = (function(){
             months : ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
             // Days Names
             days : ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+            // First Day Week (Hiedra)
+            firstDayOfTheWeek : 1,
             // Default handlers
             _dateStringParser : function(key, date) {return JsCalendar._defaultDateStringParser(key, date, this);},
             _dayStringParser : function(key, date) {return JsCalendar._defaultDayStringParser(key, date, this);}
@@ -278,7 +280,11 @@ var jsCalendar = (function(){
         // Set language
         this.setLanguage(this._options.language);
 
-        // Set first day of the week
+        // Set first day of the week (Hiedra)
+        if(typeof this.language.firstDayOfTheWeek !== 'undefined' && typeof options.fdotw === 'undefined' && typeof options.firstDayOfTheWeek === 'undefined'){
+            options.firstDayOfTheWeek = this.language.firstDayOfTheWeek;
+        } 
+
         if (typeof options.fdotw !== 'undefined'){
             options.firstDayOfTheWeek = options.fdotw;
         }
@@ -1243,6 +1249,7 @@ var jsCalendar = (function(){
         this.language.days = language.days;
         this.language.dateStringParser = language._dateStringParser;
         this.language.dayStringParser = language._dayStringParser;
+        this.language.firstDayOfTheWeek = language.firstDayOfTheWeek; // (Hiedra)
 
         // Refresh calendar
         this.refresh();

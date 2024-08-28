@@ -53,7 +53,9 @@
             'Jueves',
             'Viernes',
             'Sábado'
-        ]
+        ],
+        // First Day Week
+        firstDayOfTheWeek : 2,
     });
 
 })();

@@ -1,0 +1,18 @@
+/* Estilos para el contenedor del calendario anual */
+.jsCalendar-yearmonth-container {
+    width: 100%;
+    text-align: center;
+    margin: 0 auto;
+}
+
+/* Título del año */
+.year-title {
+    padding: 10px 32px;
+    font-size: 36px;
+    text-align: left;
+}
+
+/* Estilos para cada instancia del calendario */
+.jsCalendar {
+    display: inline-block;
+}
