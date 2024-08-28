@@ -5,11 +5,54 @@
     margin: 0 auto;
 }
 
-/* Título del año */
-.year-title {
+/* Encabezado del calendario con el título del año y los botones de navegación */
+.year-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     padding: 10px 32px;
+    position: relative;
+}
+
+.year-title {
     font-size: 36px;
-    text-align: left;
+    text-align: center;
+    flex-grow: 1;
+}
+
+/* Estilos para los controles de navegación de año */
+.year-nav-prev,
+.year-nav-next {
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Flecha hacia la izquierda */
+.year-nav-prev::before {
+    content: '◀'; /* Texto alternativo para la flecha izquierda */
+    font-size: 24px; /* Ajusta el tamaño de la flecha */
+}
+
+/* Flecha hacia la derecha */
+.year-nav-next::before {
+    content: '▶'; /* Texto alternativo para la flecha derecha */
+    font-size: 24px; /* Ajusta el tamaño de la flecha */
+}
+
+/* Posicionamiento de las flechas */
+.year-nav-prev {
+    left: 0;
+}
+
+.year-nav-next {
+    right: 0;
 }
 
 /* Estilos para cada instancia del calendario */

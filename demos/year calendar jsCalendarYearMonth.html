@@ -21,42 +21,8 @@
     <script type="text/javascript" src="../source/jsCalendarYearMonth.js"></script>
 </head>
 <body>
-    <div>
-        <!-- Selector de año -->
-        <label for="year-selector">Selecciona el año:</label>
-        <select id="year-selector">
-            <option value="2023">2023</option>
-            <option value="2024" selected>2024</option>
-            <option value="2025">2025</option>
-            <option value="2026">2026</option>
-        </select>
-    </div>
 
     <div id="year-calendar"></div>
-
-    <!-- Sobrescribir la extensión custom-date-attribute
-    <script type="text/javascript">
-        (function(window, jsCalendar) {
-            // Redefinir la extensión 'custom-date-attribute'
-            jsCalendar.ext('custom-date-attribute', {
-                update: function(instance, month) {
-                    for (var i = month.days.length - 1; i >= 0; i--) {
-                        var dayElement = instance._elements.bodyCols[i];
-                        var date = month.days[i];
-                        dayElement.setAttribute('date', 
-                            String(date.getDate()).padStart(2, '0') + '-' +
-                            String(date.getMonth() + 1).padStart(2, '0') + '-' +
-                            String(date.getFullYear())
-                        );
-                        // Cambia el estilo de las celdas del fin de semana
-                        if (date.getDay() === 0 || date.getDay() === 6) {
-                            dayElement.style.backgroundColor = '#ffeb3b'; // Fondo amarillo para fines de semana
-                        }
-                    }
-                }
-            });
-        })(window, jsCalendar);
-    </script> -->
 
     <script type="text/javascript">
         // Crear el calendario anual
@@ -64,14 +30,27 @@
             year: 2024,
             theme: 'clean', // Cambia el tema según lo desees
             language: 'es',
-            extensions: ['custom-date-attribute','custom-weekend-attribute']// Aplicar la extensión personalizada
+            yearNavigator: true, // Mostrar el navegador de años
+            extensions: ['custom-date-attribute','custom-weekend-attribute'], // Aplicar la extensión personalizada
+            renderHeader: function(year) {
+                // Crear un elemento de cabecera personalizado
+                var customHeader = document.createElement('div');
+                customHeader.className = 'custom-year-header';
+
+                // Añadir un título personalizado
+                var title = document.createElement('h1');
+                title.textContent = 'Calendario de ' + year;
+                customHeader.appendChild(title);
+
+                // Añadir otros elementos personalizados
+                var subtitle = document.createElement('p');
+                subtitle.textContent = '¡Personaliza este calendario a tu gusto!';
+                customHeader.appendChild(subtitle);
+
+                return customHeader;
+            }
         });
 
-        // Actualizar el calendario cuando se cambia el año
-        document.getElementById('year-selector').addEventListener('change', function() {
-            var selectedYear = parseInt(this.value);
-            yearCalendar.updateYear(selectedYear);
-        });
     </script>
 </body>
 </html>

@@ -27,10 +27,9 @@
                 theme: 'clean', // Tema por defecto
                 language: 'es', // Idioma por defecto
                 zeroFill: true,
-                navigator: false, // Navegador de meses
-                yearNavigator: true, // Navegador de años
-                extensions: [], // Extensiones adicionales
-                renderHeader: null // Función personalizada para renderizar la cabecera
+                navigator: false,
+                yearNavigator: true, // Mostrar el navegador de años por defecto
+                extensions: [] // Extensiones adicionales
             };
             return Object.assign({}, defaultOptions, options);
         },
@@ -39,9 +38,16 @@
         _render: function () {
             var wrapper = this._container;
 
-            // Llamar al método de renderizado de la cabecera
-            var header = this._renderHeader();
-            wrapper.appendChild(header);
+            // Crear el navegador de años si está habilitado
+            if (this._options.yearNavigator) {
+                this._renderYearNavigator(wrapper);
+            }
+
+            // Crear título del año
+            var title = document.createElement("div");
+            title.className = "year-title";
+            title.textContent = this._year;
+            wrapper.appendChild(title);
 
             // Crear calendarios mensuales
             for (var i = 0; i < 12; i++) {
@@ -66,43 +72,37 @@
             }
         },
 
-        // Método para renderizar la cabecera
-        _renderHeader: function() {
-            var header;
-            
-            // Verificar si hay una función personalizada para renderizar la cabecera
-            if (typeof this._options.renderHeader === 'function') {
-                // Llamar a la función personalizada proporcionada por el usuario
-                header = this._options.renderHeader(this._year);
-            } else {
-                // Crear la cabecera por defecto
-                header = document.createElement("div");
-                header.className = "year-header";
+        // Renderizar el navegador de años
+        _renderYearNavigator: function(wrapper) {
+            var self = this;
 
-                if (this._options.yearNavigator) {
-                    var prevNav = document.createElement("div");
-                    prevNav.className = "jsCalendar-nav-left year-nav-prev";
-                    prevNav.onclick = this._prevYear.bind(this);
-                    header.appendChild(prevNav);
-                }
+            // Crear contenedor del navegador
+            var navContainer = document.createElement("div");
+            navContainer.className = "year-navigator";
 
-                var title = document.createElement("div");
-                title.className = "year-title";
-                title.textContent = this._year;
-                header.appendChild(title);
+            // Crear botón para el año anterior
+            var prevButton = document.createElement("button");
+            prevButton.className = "year-prev";
+            prevButton.textContent = "⟨"; // Símbolo de flecha hacia la izquierda
+            prevButton.addEventListener("click", function() {
+                self.updateYear(self._year - 1);
+            });
+            navContainer.appendChild(prevButton);
 
-                if (this._options.yearNavigator) {
-                    var nextNav = document.createElement("div");
-                    nextNav.className = "jsCalendar-nav-right year-nav-next";
-                    nextNav.onclick = this._nextYear.bind(this);
-                    header.appendChild(nextNav);
-                }
-            }
-            
-            return header;
+            // Crear botón para el año siguiente
+            var nextButton = document.createElement("button");
+            nextButton.className = "year-next";
+            nextButton.textContent = "⟩"; // Símbolo de flecha hacia la derecha
+            nextButton.addEventListener("click", function() {
+                self.updateYear(self._year + 1);
+            });
+            navContainer.appendChild(nextButton);
+
+            // Añadir el navegador al contenedor principal
+            wrapper.appendChild(navContainer);
         },
 
-        // Método para actualizar el año
+        // Actualizar el año
         updateYear: function(newYear) {
             this._year = newYear;
 
@@ -113,16 +113,6 @@
             for (var i = 0; i < 12; i++) {
                 this._calendars[i].goto("01-" + ((i + 1 < 10) ? "0" : "") + (i + 1) + "-" + this._year);
             }
-        },
-
-        // Navegar al año anterior
-        _prevYear: function() {
-            this.updateYear(this._year - 1);
-        },
-
-        // Navegar al año siguiente
-        _nextYear: function() {
-            this.updateYear(this._year + 1);
         },
 
         // Aplicar extensiones
