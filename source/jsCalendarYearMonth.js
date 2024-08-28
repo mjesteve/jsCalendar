@@ -24,13 +24,15 @@
         _parseOptions: function (options) {
             var defaultOptions = {
                 year: new Date().getFullYear(),
-                theme: 'clean', // Tema por defecto
-                language: 'es', // Idioma por defecto
+                theme: 'clean',
+                language: 'es',
                 zeroFill: true,
-                navigator: false, // Navegador de meses
-                yearNavigator: true, // Navegador de años
-                extensions: [], // Extensiones adicionales
-                renderHeader: null // Función personalizada para renderizar la cabecera
+                navigator: false,
+                yearNavigator: true,
+                extensions: [],
+                renderHeader: null, // Función personalizada para renderizar la cabecera
+                onPrevYear: null,   // Función personalizada para navegar al año anterior
+                onNextYear: null    // Función personalizada para navegar al año siguiente
             };
             return Object.assign({}, defaultOptions, options);
         },
@@ -39,8 +41,19 @@
         _render: function () {
             var wrapper = this._container;
 
-            // Llamar al método de renderizado de la cabecera
-            var header = this._renderHeader();
+            // Vincular el contexto correcto (this) a las funciones de navegación
+            var onPrevYear = this._options.onPrevYear ? this._options.onPrevYear.bind(this) : this._prevYear.bind(this);
+            var onNextYear = this._options.onNextYear ? this._options.onNextYear.bind(this) : this._nextYear.bind(this);
+        
+            // Renderizar la cabecera
+            var header = this._renderHeader(onPrevYear, onNextYear);
+
+            // Pasar los métodos de navegación a renderHeader
+            /* var header = this._renderHeader(
+                this._options.onPrevYear || (() => this.updateYear(this._year - 1)),
+                this._options.onNextYear || (() => this.updateYear(this._year + 1))
+            ); */
+
             wrapper.appendChild(header);
 
             // Crear calendarios mensuales
@@ -65,49 +78,50 @@
                 this._calendars.push(calendar);
             }
         },
-
+        
         // Método para renderizar la cabecera
-        _renderHeader: function() {
+        _renderHeader: function(onPrevYear, onNextYear) {
             var header;
-            
+        
             // Verificar si hay una función personalizada para renderizar la cabecera
             if (typeof this._options.renderHeader === 'function') {
-                // Llamar a la función personalizada proporcionada por el usuario
-                header = this._options.renderHeader(this._year);
+                header = this._options.renderHeader(this._year, onPrevYear, onNextYear);
             } else {
                 // Crear la cabecera por defecto
                 header = document.createElement("div");
                 header.className = "year-header";
-
+        
                 if (this._options.yearNavigator) {
                     var prevNav = document.createElement("div");
                     prevNav.className = "jsCalendar-nav-left year-nav-prev";
-                    prevNav.onclick = this._prevYear.bind(this);
+                    prevNav.onclick = onPrevYear; // Usar función pasada o por defecto
                     header.appendChild(prevNav);
                 }
-
+        
                 var title = document.createElement("div");
                 title.className = "year-title";
                 title.textContent = this._year;
                 header.appendChild(title);
-
+        
                 if (this._options.yearNavigator) {
                     var nextNav = document.createElement("div");
                     nextNav.className = "jsCalendar-nav-right year-nav-next";
-                    nextNav.onclick = this._nextYear.bind(this);
+                    nextNav.onclick = onNextYear; // Usar función pasada o por defecto
                     header.appendChild(nextNav);
                 }
             }
-            
+        
             return header;
         },
-
+        
         // Método para actualizar el año
         updateYear: function(newYear) {
             this._year = newYear;
 
             // Actualizar el título del año
-            this._container.querySelector(".year-title").textContent = this._year;
+            //this._container.querySelector(".year-title").textContent = this._year;
+            var title = this._container.querySelector(".year-title");
+            title.textContent = this._year;
 
             // Actualizar cada calendario con el nuevo año
             for (var i = 0; i < 12; i++) {

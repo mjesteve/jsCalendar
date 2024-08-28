@@ -36,13 +36,15 @@
 
 /* Flecha hacia la izquierda */
 .year-nav-prev::before {
-    content: '◀'; /* Texto alternativo para la flecha izquierda */
+    /* content: '◀'; Texto alternativo para la flecha izquierda */
+    content: "<";
     font-size: 24px; /* Ajusta el tamaño de la flecha */
 }
 
 /* Flecha hacia la derecha */
 .year-nav-next::before {
-    content: '▶'; /* Texto alternativo para la flecha derecha */
+     /*content: '▶'; Texto alternativo para la flecha derecha */
+    content: ">";
     font-size: 24px; /* Ajusta el tamaño de la flecha */
 }
 
