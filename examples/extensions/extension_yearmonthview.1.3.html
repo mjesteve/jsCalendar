@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vista Anual con jsCalendar.yearmonthview</title>
+    <!-- jsCalendar -->
+    <link rel="stylesheet" type="text/css" href="../../source/jsCalendar.css">
+    <link rel="stylesheet" type="text/css" href="../../extensions/jsCalendar.yearmonthview.1.3.css">
+    <link rel="stylesheet" type="text/css" href="../../themes/jsCalendar.micro.css">
+    <link rel="stylesheet" type="text/css" href="../../themes/jsCalendar.medium.css">
+    <script type="text/javascript" src="../../source/jsCalendar.js"></script>
+    <script type="text/javascript" src="../../extensions/jsCalendar.yearmonthview.1.3.js"></script>
+    <script type="text/javascript" src="../../source/jsCalendar.lang.es.js"></script>
+    
+</head>
+<body>
+
+    <h1>Calendario Anual por Meses</h1>
+
+    <div id="yearly-calendar-container-micro" ></div>
+
+    <div id="yearly-calendar-container"></div>
+
+    <script>
+        function calculateCalendarWidth() {
+            // Crear un contenedor temporal en el DOM
+            const tempContainer = document.createElement('div');
+            tempContainer.style.position = 'absolute';
+            tempContainer.style.left = '-9999px';
+            document.body.appendChild(tempContainer);
+
+            // Crear una fila simulada de 7 días, aplicando las clases necesarias
+            for (let i = 0; i < 7; i++) {
+                const dayCell = document.createElement('div');
+                dayCell.className = 'jsCalendar-day';
+                dayCell.textContent = '00'; // Texto simulado
+                tempContainer.appendChild(dayCell);
+            }
+
+            // Obtener el ancho de una celda
+            const cell = tempContainer.querySelector('.jsCalendar-day');
+            const cellStyle = window.getComputedStyle(cell);
+            const cellWidth = parseFloat(cellStyle.width);
+            const cellPadding = parseFloat(cellStyle.paddingLeft) + parseFloat(cellStyle.paddingRight);
+            const cellBorder = parseFloat(cellStyle.borderLeftWidth) + parseFloat(cellStyle.borderRightWidth);
+
+            // Calcular el ancho total de una celda
+            const totalCellWidth = cellWidth + cellPadding + cellBorder;
+
+            // Ancho total del calendario (7 celdas)
+            const calendarWidth = totalCellWidth * 7;
+
+            // Eliminar el contenedor temporal
+            document.body.removeChild(tempContainer);
+
+            return calendarWidth;
+        }
+
+        const calendarWidth = calculateCalendarWidth();
+        const container = document.getElementById('yearly-calendar-container-micro');
+
+        container.style.display = "grid";
+        container.style.gridTemplateColumns = `repeat(auto-fill, minmax(${calendarWidth}px, 1fr))`;
+        container.style.gridGap = "10px";
+        
+        const containerStyle = window.getComputedStyle(container);
+        const containerWidth = container.clientWidth;
+        const ncols = Math.min( Math.floor(parseFloat(containerWidth)/calendarWidth), 12 );
+        
+        jsCalendar.yearmonthview({
+            target: '#yearly-calendar-container-micro',
+            year: 2024, // Especificar el año
+            monthsPerRow: ncols, // meses por fila
+            calendarWidth: calendarWidth, // Valor predeterminado basado en el cálculo
+            autoResponsive: false, // Ajuste automático en pantallas pequeñas
+            language: 'es',
+            navigator: false,
+            zeroFill: true,
+            monthFormat: 'MMM YYYY',
+            // class: 'classic-theme orange medium-theme',
+        });
+        /* jsCalendar.yearmonthview({
+            target: '#yearly-calendar-container',
+            year: 2024, // Especificar el año
+            autoResponsive: true, // Ajuste automático en pantallas pequeñas
+            language: 'es',
+            navigator: false,
+            zeroFill: true,
+            class: 'classic-theme micro-theme', // Especifica el tema "micro"
+        }); */
+        
+    </script>
+</body>
+</html>

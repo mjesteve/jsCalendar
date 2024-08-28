@@ -6,55 +6,42 @@
     <title>Vista Anual con jsCalendar.yearmonthview</title>
     <!-- jsCalendar -->
     <link rel="stylesheet" type="text/css" href="../../source/jsCalendar.css">
-    <link rel="stylesheet" type="text/css" href="../../themes/jsCalendar.micro.css">
-    <link rel="stylesheet" type="text/css" href="../../themes/jsCalendar.medium.css">
-    <script type="text/javascript" src="../../source/jsCalendar.js"></script>
-    <script type="text/javascript" src="../../extensions/jsCalendar.yearmonthview.js"></script>
-    <script type="text/javascript" src="../../source/jsCalendar.lang.es.js"></script>
     <link rel="stylesheet" type="text/css" href="../../extensions/jsCalendar.yearmonthview.css">
+    <link rel="stylesheet" type="text/css" href="../../themes/jsCalendar.micro.css">
+    <script type="text/javascript" src="../../source/jsCalendar.js"></script>
+    <script type="text/javascript" src="../../extensions/jsCalendar.yearmonthview.1.2.js"></script>
+    <script type="text/javascript" src="../../source/jsCalendar.lang.es.js"></script>
     
 </head>
 <body>
 
     <h1>Calendario Anual por Meses</h1>
 
-    <div id="yearly-calendar-container-micro" ></div>
+    <div id="yearly-calendar-container-micro"></div>
 
-    <div id="yearly-calendar-container" class='classic-theme micro-theme green'></div>
+    <div id="yearly-calendar-container"></div>
 
     <script>
-        var yearView = jsCalendar.yearmonthview({
+        // Inicializar el yearmonthview en un contenedor específico, para el año 2025
+        jsCalendar.yearmonthview({
             target: '#yearly-calendar-container-micro',
             year: 2024, // Especificar el año
+            monthsPerRow: 4, // 4 meses por fila
+            calendarWidth: 300, // Ancho mínimo de 300px
             autoResponsive: true, // Ajuste automático en pantallas pequeñas
             language: 'es',
             navigator: false,
             zeroFill: true,
             monthFormat: 'MMM YYYY',
-            class: 'material-theme micro-theme orange',
+            class: 'classic-theme micro-theme', // Especifica el tema "micro"
         });
-        /* jsCalendar.yearmonthview({
+        jsCalendar.yearmonthview({
             target: '#yearly-calendar-container',
             year: 2024, // Especificar el año
-            monthsPerRow: ncols, // meses por fila
-            calendarWidth: 300, // Valor predeterminado basado en el cálculo
             autoResponsive: true, // Ajuste automático en pantallas pequeñas
             language: 'es',
             navigator: false,
             zeroFill: true,
-            class: 'classic-theme orange medium-theme',class: 'classic-theme micro-theme green'
-            class: 'classic-theme micro-theme', // Especifica el tema "micro"
-        });auto-jsCalendar */
-        
-        // Get the element
-        var element = document.getElementById("yearly-calendar-container");
-        // Create the calendar
-        jsCalendar.new(element, new Date(), {
-            language : 'es',
-            navigator: false,
-            zeroFill : true,
-            language: 'es',
-            monthFormat: 'MMM YYYY',
         });
         
     </script>

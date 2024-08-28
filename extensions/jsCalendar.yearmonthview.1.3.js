@@ -19,8 +19,8 @@
         minYear: 1900, // Año que se mostrará
         maxYear: 2100, // Año que se mostrará
         autoResponsive: true, // Ajuste automático en pantallas pequeñas
-        monthsPerRow: NaN, // Número de meses por fila
-        calendarWidth: NaN, // Ancho mínimo de cada calendario
+        monthsPerRow: 3, // Número de meses por fila
+        calendarWidth: 300, // Ancho mínimo de cada calendario
         classWrapper: 'jsCalendar-yearmonthview-container',
         class: undefined, //theme
         jsCalendarOptions: {},
@@ -32,8 +32,6 @@
         args = this._parseArguments(args);
         // Configurar el contenedor
         this._setTarget(args.target);
-        //YearMonthView.options.calendarWidth = this.calculateCalendarWidth();
-        this._calendarWidthDefault = this.calculateCalendarWidth();
         // Parsear opciones
         var options = this._parseOptions(args.options);
         // Añadir la clase 'jsCalendar-yearmonthview-container' al contenedor principal
@@ -176,37 +174,6 @@
         
         if (typeof options.class === 'string'){
             this._options.class = options.class;
-            this._calendarWidthDefault = this.calculateCalendarWidth();
-        }
-
-        if (typeof options.calendarWidth !== 'undefined'){
-            // If number
-            if (typeof options.calendarWidth === 'number') {
-                this._options.calendarWidth = options.calendarWidth;
-            }
-            // If string
-            else if (typeof options.calendarWidth === 'string') {
-                item = parseInt(options.calendarWidth);
-                if (!isNaN(item)) this._options.calendarWidth = item;
-            }
-
-            if (isNaN(this._options.calendarWidth)){
-                this._options.calendarWidth = this._calendarWidthDefault;
-            }
-        } else {
-            this._options.calendarWidth = this._calendarWidthDefault;
-        }
-
-        if (typeof options.monthsPerRow !== 'undefined'){
-            // If number
-            if (typeof options.monthsPerRow === 'number') {
-                this._options.monthsPerRow = options.monthsPerRow;
-            }
-            // If string
-            else if (typeof options.monthsPerRow === 'string') {
-                item = parseInt(options.monthsPerRow);
-                if (!isNaN(item)) this._options.monthsPerRow = item;
-            }
         }
 
         if (typeof options.autoResponsive !== 'undefined'){
@@ -249,36 +216,18 @@
 
         container.innerHTML = ''; // Limpiar el contenedor
 
-        const containerStyle = window.getComputedStyle(container);
-        var containerPadding = parseFloat(containerStyle.paddingLeft) + parseFloat(containerStyle.paddingRight);
-        var containerBorder = parseFloat(containerStyle.borderLeftWidth) + parseFloat(containerStyle.borderRightWidth);
-        // var containerGap = parseFloat(containerStyle.gap) * 2;
-        var containerOffSet = containerPadding + containerBorder;
-
-        var containerWidth = container.clientWidth - containerOffSet;
-        var monthsPerRow, calendarWidth;
-        var calendarWidth = this._calendarWidthDefault;
-        if(!isNaN(this._options.calendarWidth)){
-            calendarWidth = this._options.calendarWidth;
-        }
-        monthsPerRow = this.calculateMonthsPerRow(containerWidth, calendarWidth);
-        if(!isNaN(this._options.monthsPerRow) && this._options.monthsPerRow < monthsPerRow)
-        {
-            monthsPerRow = this._options.monthsPerRow;
-        }
-        calendarWidth = Math.floor(containerWidth / monthsPerRow);
-        // calendarWidth = Math.max(Math.floor(containerWidth / monthsPerRow), calendarWidth);
-        //const calendarWidth = Math.max(Math.floor(containerWidth / monthsPerRow), this._options.calendarWidth);
-        container.style.display = "inline-block";
-        //container.style.gridTemplateColumns = `repeat(auto-fill, minmax(${calendarWidth}px, 1fr))`;
-        //container.style.gridGap = "10px";
-
         const totalMonths = 12;
+        const containerWidth = container.clientWidth;
+/*         const monthsPerRow = this.calculateMonthsPerRow(containerWidth);
+        const calendarWidth = Math.max(Math.floor(containerWidth / monthsPerRow) - 20, this._options.calendarWidth);
+
+        container.style.display = "grid";
+        container.style.gridTemplateColumns = `repeat(auto-fill, minmax(${calendarWidth}px, 1fr))`;
+        container.style.gridGap = "10px"; */
+
         for (let i = 0; i < totalMonths; i++) {
             const calendarDiv = document.createElement('div');
-            calendarDiv.style.width = `${calendarWidth}px`; 
-            /* calendarDiv.style.maxWidth = `${calendarWidth}px`; 
-            calendarDiv.style.minWidth = `${calendarWidth}px`;  */
+            /* calendarDiv.style.width = `${calendarWidth}px`; */
             if(this._options.class !== undefined){
                 calendarDiv.className += this._options.class;
             }
@@ -301,55 +250,9 @@
     };
 
     // Calcular el número de meses por fila
-    YearMonthView.prototype.calculateMonthsPerRow = function(containerWidth, calendarWidth) {
-        const calculatedMonthsPerRow = Math.floor(containerWidth / calendarWidth);
+    YearMonthView.prototype.calculateMonthsPerRow = function(containerWidth) {
+        const calculatedMonthsPerRow = Math.floor(containerWidth / this._options.calendarWidth);
         return Math.max(calculatedMonthsPerRow, 1);
-    };
-
-    // Calcular el número de meses por fila
-    YearMonthView.prototype.calculateCalendarWidth = function() {
-        // Crear un contenedor temporal en el DOM
-        var tempContainer = document.createElement('div');
-        // tempContainer.classList.add('jsCalendar');
-        if (this._options === undefined || typeof this._options.class === 'undefined'){
-            tempContainer.className = 'jsCalendar classic-theme';
-        } else {
-            tempContainer.className = 'jsCalendar ' + this._options.class;
-        }
-
-        tempContainer.style.position = 'absolute';
-        tempContainer.style.left = '-9999px';
-        document.body.appendChild(tempContainer);
-
-        // Crear una fila simulada de 7 días, aplicando las clases necesarias
-        for (var i = 0; i < 7; i++) {
-            var dayCell = document.createElement('div');
-            dayCell.className = 'jsCalendar-day';
-            dayCell.textContent = '00'; // Texto simulado
-            tempContainer.appendChild(dayCell);
-        }
-
-        // Forzar la recalibración de estilo
-        window.getComputedStyle(tempContainer).width;
-
-        // Obtener el ancho de una celda
-        var cell = tempContainer.querySelector('.jsCalendar-day');
-        var cellStyle = window.getComputedStyle(cell);
-        var cellWidth = parseFloat(cellStyle.width);
-        var cellPadding = parseFloat(cellStyle.paddingLeft) + parseFloat(cellStyle.paddingRight);
-        var cellBorder = parseFloat(cellStyle.borderLeftWidth) + parseFloat(cellStyle.borderRightWidth);
-        var cellMargin = parseFloat(cellStyle.marginLeft) + parseFloat(cellStyle.marginRight);
-
-        // Calcular el ancho total de una celda, incluyendo márgenes
-        var totalCellWidth = cellWidth + cellPadding + cellBorder + cellMargin;
-
-        // Ancho total del calendario (7 celdas)
-        var calendarWidth = totalCellWidth * 7;
-
-        // Eliminar el contenedor temporal
-        document.body.removeChild(tempContainer);
-
-        return calendarWidth;
     };
 
     // Registrar YearMonthView como una extensión de jsCalendar
