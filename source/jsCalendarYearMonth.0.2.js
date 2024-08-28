@@ -23,24 +23,13 @@
         // Parsear opciones
         _parseOptions: function (options) {
             var defaultOptions = {
-                language : 'en',
-                zeroFill : false,
-                monthFormat : 'month',
-                dayFormat : 'D',
-                firstDayOfTheWeek : false,
-                navigator : false,
-                navigatorPosition : 'both',
-                min : false,
-                max : false,
-                onMonthRender : false,
-                onDayRender : false,
-                onDateRender : false,
-
                 year: new Date().getFullYear(),
-                theme: 'classic',
+                theme: 'clean',
+                language: 'es',
+                zeroFill: true,
+                navigator: false,
                 yearNavigator: true,
                 extensions: [],
-                selectedDates: [], // Array de fechas seleccionadas
                 renderHeader: null, // Función personalizada para renderizar la cabecera
                 onPrevYear: null,   // Función personalizada para navegar al año anterior
                 onNextYear: null    // Función personalizada para navegar al año siguiente
@@ -59,6 +48,12 @@
             // Renderizar la cabecera
             var header = this._renderHeader(onPrevYear, onNextYear);
 
+            // Pasar los métodos de navegación a renderHeader
+            /* var header = this._renderHeader(
+                this._options.onPrevYear || (() => this.updateYear(this._year - 1)),
+                this._options.onNextYear || (() => this.updateYear(this._year + 1))
+            ); */
+
             wrapper.appendChild(header);
 
             // Crear calendarios mensuales
@@ -72,25 +67,12 @@
                 var calendar = jsCalendar.new(monthContainer, 0, {
                     language: this._options.language,
                     zeroFill: this._options.zeroFill,
-                    monthFormat: this._options.monthFormat,
-                    dayFormat: this._options.dayFormat,
-                    firstDayOfTheWeek: !this._options.firstDayOfTheWeek ? undefined:this._options.firstDayOfTheWeek,
-                    navigator: false,
-                    //navigatorPosition: this._options.navigatorPosition,
-                    min: this._options.min,
-                    max: this._options.max,
-                    onMonthRender: this._options.onMonthRender,
-                    onDayRender: this._options.onDayRender,
-                    onDateRender: this._options.onDateRender
+                    navigator: this._options.navigator
                 });
-                //calendar.goto("01-" + ((i + 1 < 10) ? "0" : "") + (i + 1) + "-" + this._year);
-                calendar.goto(new Date(this._year,i,1));
+                calendar.goto("01-" + ((i + 1 < 10) ? "0" : "") + (i + 1) + "-" + this._year);
 
                 // Aplicar extensiones a cada calendario
                 this._applyExtensions(calendar);
-
-                // Seleccionar las fechas para este calendario
-                this._selectDatesForMonth(calendar, i + 1);
 
                 // Almacenar la instancia del calendario
                 this._calendars.push(calendar);
@@ -171,29 +153,7 @@
                     }
                 });
             }
-        },
-
-        // Selección de fechas
-        _selectDatesForMonth: function (calendar, month) {
-            console.log("Processing month:", month);
-            var datesToSelect = this._options.selectedDates.filter(function (date) {
-                var selectedDate = new Date(date);
-                console.log("Checking date:", selectedDate);
-                return selectedDate.getFullYear() === this._year && (selectedDate.getMonth() + 1) === month;
-            }, this);
-            
-            if (datesToSelect.length > 0) {
-                console.log("Original dates:", datesToSelect);
-                var dateObjects = datesToSelect.map(function (date) {
-                    var dateObj = new Date(date);
-                    console.log("Converted to Date object:", dateObj);
-                    return dateObj;
-                });
-                console.log("Selecting dates:", dateObjects);
-                calendar.select(dateObjects);
-            }
         }
-        
     };
 
     // Añadir la extensión 'custom-date-attribute'
