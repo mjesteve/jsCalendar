@@ -37,7 +37,6 @@ jsCalendarYearMonth.prototype._parseOptions = function(options) {
         onMonthRender: false,
         onDayRender: false,
         onDateRender: false,
-        onDateClick: null,     // Nueva opción para onDateClick
 
         year: new Date().getFullYear(),
         themeClasses: [], // Array de clases de temas
@@ -48,6 +47,7 @@ jsCalendarYearMonth.prototype._parseOptions = function(options) {
         onPrevYear: null,   // Función personalizada para navegar al año anterior
         onNextYear: null,    // Función personalizada para navegar al año siguiente
         onYearChanged: null,  // Nueva opción para onYearChanged
+        onDateClick: null,     // Nueva opción para onDateClick
     };
     return Object.assign({}, defaultOptions, options);
 };
@@ -234,10 +234,7 @@ jsCalendar.ext('custom-date-attribute', {
         for (var i = month.days.length - 1; i >= 0; i--) {
             var dayElement = instance._elements.bodyCols[i];
             var date = month.days[i];
-            dayElement.setAttribute('date', 
-                String(date.getDate()).padStart(2, '0') + '/' +
-                String(date.getMonth() + 1).padStart(2, '0') + '/' +
-                String(date.getFullYear())
+            dayElement.setAttribute('date', jsCalendar.tools.dateToString(date, 'YYYYMMDD', instance._options.language || 'en')
             );
         }
     }
