@@ -234,8 +234,8 @@ jsCalendar.ext('custom-date-attribute', {
         for (var i = month.days.length - 1; i >= 0; i--) {
             var dayElement = instance._elements.bodyCols[i];
             var date = month.days[i];
-            dayElement.setAttribute('date', jsCalendar.tools.dateToString(date, 'YYYYMMDD', instance._options.language || 'en')
-            );
+            dayElement.setAttribute('date', 
+                jsCalendar.tools.dateToString(date, 'YYYYMMDD', instance._options.language || 'en'));
         }
     }
 });
