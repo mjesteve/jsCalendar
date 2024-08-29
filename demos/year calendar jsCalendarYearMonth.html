@@ -23,6 +23,8 @@
 
 </head>
 <body>
+    <div class="auto-jsCalendar micro-theme grey-theme" data-selected-dates="2024-08-15,2024-08-22,2024-08-10,2024-08-25"></div>
+    <div class="auto-jsCalendar classic-theme micro-theme orange" data-selected-dates="2024-08-15,2024-08-22,2024-08-10,2024-08-25"></div>
 
     <div id="year-calendar"></div>
 
@@ -32,7 +34,8 @@
         // Crear el calendario anual
         var yearCalendar = new jsCalendarYearMonth(document.getElementById('year-calendar'), {
             year: 2024,
-            theme: 'clean', // Cambia el tema según lo desees
+            //theme: 'clean', // Cambia el tema según lo desees
+            themeClasses: ['classic-theme', "red"], // Combinación de tema y subtema
             language: 'es',
             yearNavigator: true, // Mostrar el navegador de años
             extensions: ['custom-date-attribute','custom-weekend-attribute'], // Aplicar la extensión personalizada
@@ -109,7 +112,8 @@
 
         var yearCalendar2 = new jsCalendarYearMonth(document.getElementById('year-calendar2'), {
             year: 2024,
-            theme: 'classic', // Cambia el tema según lo desees
+            themeClasses: ['black-theme'], // Combinación de tema y subtema
+            //theme: 'classic', // Cambia el tema según lo desees
             language: 'es',
             yearNavigator: true, // Mostrar el navegador de años
             extensions: ['custom-date-attribute','custom-weekend-attribute'], // Aplicar la extensión personalizada, 

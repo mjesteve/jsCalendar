@@ -9,7 +9,7 @@
 
         // Crear el contenedor principal
         this._container = element;
-        this._container.classList.add('jsCalendar-yearmonth-container');
+        this._container.classList.add('jsCalendar-yearmonth');
         
         // Almacenar las instancias de los calendarios
         this._calendars = [];

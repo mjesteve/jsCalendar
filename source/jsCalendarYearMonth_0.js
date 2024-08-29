@@ -12,7 +12,7 @@
 
         // Crear el contenedor principal
         this._container = element;
-        this._container.classList.add('jsCalendar-yearmonth-container');
+        this._container.classList.add('jsCalendar-yearmonth');
         
         // Crear la vista anual
         this._render();

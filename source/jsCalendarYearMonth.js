@@ -8,7 +8,7 @@
 
         // Crear el contenedor principal
         this._container = element;
-        this._container.classList.add('jsCalendar-yearmonth-container');
+        this._container.classList.add('jsCalendar-yearmonth');
         
         // Almacenar las instancias de los calendarios
         this._calendars = [];
@@ -35,7 +35,7 @@
                 onDateRender : false,
 
                 year: new Date().getFullYear(),
-                theme: 'classic',
+                themeClasses: [], // Array de clases de temas
                 yearNavigator: true,
                 extensions: [],
                 selectedDates: [], // Array de fechas seleccionadas
@@ -61,7 +61,10 @@
             // Crear calendarios mensuales
             for (var i = 0; i < 12; i++) {
                 var monthContainer = document.createElement("div");
-                monthContainer.className = this._options.theme + "-theme"; // Aplicar tema
+                // Aplicar las clases de tema especificadas
+                this._options.themeClasses.forEach(function (themeClass) {
+                    monthContainer.classList.add(themeClass);
+                });
                 wrapper.appendChild(monthContainer);
                 
                 var calendar = jsCalendar.new(monthContainer, 0, {
@@ -177,7 +180,7 @@
                 /* // Desmarcar cada fecha individualmente
                 var selectedDates = this._calendars[i].getSelected();
                 selectedDates.forEach(date => this._calendars[i].unselect(date));  */
-                
+
                 // Desmarcar todas las fechas
                 this._calendars[i].clearselect();
                 // Seleccionar las nuevas fechas
@@ -207,7 +210,7 @@
             for (var i = month.days.length - 1; i >= 0; i--) {
                 var dayElement = instance._elements.bodyCols[i];
                 if (month.days[i].getDay() === 0 || month.days[i].getDay() === 6) {
-                    dayElement.style.backgroundColor = '#ffeb3b'; // Fondo amarillo para fines de semana
+                    // dayElement.style.backgroundColor = '#ffeb3b'; // Fondo amarillo para fines de semana
                     dayElement.classList.add('jsCalendar-weekend-days');
                 }
             }
