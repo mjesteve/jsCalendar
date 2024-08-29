@@ -17,6 +17,9 @@
         this._render();
     };
 
+    // Version
+    jsCalendarYearMonth.version = 'v0.0.8-beta';
+
     jsCalendarYearMonth.prototype = {
         constructor: jsCalendarYearMonth,
         // Parsear opciones
