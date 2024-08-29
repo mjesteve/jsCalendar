@@ -18,7 +18,7 @@ function jsCalendarYearMonth(element, options) {
 }
 
 // Version
-jsCalendarYearMonth.version = 'v0.1.0-beta';
+jsCalendarYearMonth.version = 'v0.1.1-beta';
 
 // Asignar métodos individualmente al prototipo de jsCalendarYearMonth
 
@@ -37,6 +37,7 @@ jsCalendarYearMonth.prototype._parseOptions = function(options) {
         onMonthRender: false,
         onDayRender: false,
         onDateRender: false,
+        onDateClick: null,     // Nueva opción para onDateClick
 
         year: new Date().getFullYear(),
         themeClasses: [], // Array de clases de temas
@@ -45,7 +46,8 @@ jsCalendarYearMonth.prototype._parseOptions = function(options) {
         selectedDates: [], // Array de fechas seleccionadas
         renderHeader: null, // Función personalizada para renderizar la cabecera
         onPrevYear: null,   // Función personalizada para navegar al año anterior
-        onNextYear: null    // Función personalizada para navegar al año siguiente
+        onNextYear: null,    // Función personalizada para navegar al año siguiente
+        onYearChanged: null,  // Nueva opción para onYearChanged
     };
     return Object.assign({}, defaultOptions, options);
 };
@@ -83,9 +85,24 @@ jsCalendarYearMonth.prototype._render = function() {
             max: this._options.max,
             onMonthRender: this._options.onMonthRender,
             onDayRender: this._options.onDayRender,
-            onDateRender: this._options.onDateRender
+            onDateRender: this._options.onDateRender,
         });
         calendar.goto(new Date(this._year, i, 1));
+
+        // Add target listeners
+        var parent = this;
+        // Calendar click handler
+        calendar.onDateClick(function(event, date) {
+            if (typeof parent._options.onDateClick === 'function') {
+                parent._options.onDateClick(event, date);
+            }
+
+            // Dispatchar el evento onDateClick
+            var event = new CustomEvent('onDateClick', {
+                detail: { event: event, date: date }
+            });
+            wrapper.dispatchEvent(event);
+        });
 
         this._applyExtensions(calendar);
 
@@ -130,6 +147,7 @@ jsCalendarYearMonth.prototype._renderHeader = function(onPrevYear, onNextYear) {
 
 // Método updateYear
 jsCalendarYearMonth.prototype.updateYear = function(newYear) {
+    const oldYear = this._year;
     this._year = newYear;
 
     var title = this._container.querySelector(".year-title");
@@ -138,6 +156,17 @@ jsCalendarYearMonth.prototype.updateYear = function(newYear) {
     for (var i = 0; i < 12; i++) {
         this._calendars[i].goto(new Date(this._year, i, 1));
         this._selectDatesForMonth(this._calendars[i], i + 1);
+    }
+
+    // Dispatchar el evento onYearChanged
+    var event = new CustomEvent('onYearChanged', {
+        detail: { newYear: this._year, oldYear: oldYear }
+    });
+    this._container.dispatchEvent(event);
+
+    // Ejecutar la función onYearChanged si está definida en las opciones
+    if (typeof this._options.onYearChanged === 'function') {
+        this._options.onYearChanged(this._year, oldYear);
     }
 };
 
