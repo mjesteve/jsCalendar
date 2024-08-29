@@ -1,5 +1,4 @@
 (function (window, jsCalendar) {
-    // Componente jsCalendarYearMonth
     var jsCalendarYearMonth = function (element, options) {
         // Parsear opciones
         this._options = this._parseOptions(options);
@@ -18,7 +17,6 @@
         this._render();
     };
 
-    // Métodos del Componente
     jsCalendarYearMonth.prototype = {
         // Parsear opciones
         _parseOptions: function (options) {
@@ -48,7 +46,6 @@
             return Object.assign({}, defaultOptions, options);
         },
 
-        // Renderizar la vista anual
         _render: function () {
             var wrapper = this._container;
 
@@ -63,12 +60,10 @@
 
             // Crear calendarios mensuales
             for (var i = 0; i < 12; i++) {
-                // Crear contenedor para cada mes
                 var monthContainer = document.createElement("div");
                 monthContainer.className = this._options.theme + "-theme"; // Aplicar tema
                 wrapper.appendChild(monthContainer);
                 
-                // Crear el calendario para el mes específico
                 var calendar = jsCalendar.new(monthContainer, 0, {
                     language: this._options.language,
                     zeroFill: this._options.zeroFill,
@@ -76,43 +71,35 @@
                     dayFormat: this._options.dayFormat,
                     firstDayOfTheWeek: !this._options.firstDayOfTheWeek ? undefined:this._options.firstDayOfTheWeek,
                     navigator: false,
-                    //navigatorPosition: this._options.navigatorPosition,
                     min: this._options.min,
                     max: this._options.max,
                     onMonthRender: this._options.onMonthRender,
                     onDayRender: this._options.onDayRender,
                     onDateRender: this._options.onDateRender
                 });
-                //calendar.goto("01-" + ((i + 1 < 10) ? "0" : "") + (i + 1) + "-" + this._year);
                 calendar.goto(new Date(this._year,i,1));
 
-                // Aplicar extensiones a cada calendario
                 this._applyExtensions(calendar);
 
-                // Seleccionar las fechas para este calendario
                 this._selectDatesForMonth(calendar, i + 1);
 
-                // Almacenar la instancia del calendario
                 this._calendars.push(calendar);
             }
         },
-        
-        // Método para renderizar la cabecera
+
         _renderHeader: function(onPrevYear, onNextYear) {
             var header;
         
-            // Verificar si hay una función personalizada para renderizar la cabecera
             if (typeof this._options.renderHeader === 'function') {
                 header = this._options.renderHeader(this._year, onPrevYear, onNextYear);
             } else {
-                // Crear la cabecera por defecto
                 header = document.createElement("div");
                 header.className = "year-header";
         
                 if (this._options.yearNavigator) {
                     var prevNav = document.createElement("div");
                     prevNav.className = "jsCalendar-nav-left year-nav-prev";
-                    prevNav.onclick = onPrevYear; // Usar función pasada o por defecto
+                    prevNav.onclick = onPrevYear;
                     header.appendChild(prevNav);
                 }
         
@@ -124,7 +111,7 @@
                 if (this._options.yearNavigator) {
                     var nextNav = document.createElement("div");
                     nextNav.className = "jsCalendar-nav-right year-nav-next";
-                    nextNav.onclick = onNextYear; // Usar función pasada o por defecto
+                    nextNav.onclick = onNextYear;
                     header.appendChild(nextNav);
                 }
             }
@@ -132,37 +119,30 @@
             return header;
         },
         
-        // Método para actualizar el año
         updateYear: function(newYear) {
             this._year = newYear;
 
-            // Actualizar el título del año
-            //this._container.querySelector(".year-title").textContent = this._year;
             var title = this._container.querySelector(".year-title");
             title.textContent = this._year;
 
-            // Actualizar cada calendario con el nuevo año
             for (var i = 0; i < 12; i++) {
-                this._calendars[i].goto("01-" + ((i + 1 < 10) ? "0" : "") + (i + 1) + "-" + this._year);
+                this._calendars[i].goto(new Date(this._year, i, 1));
+                this._selectDatesForMonth(this._calendars[i], i + 1);
             }
         },
 
-        // Navegar al año anterior
         _prevYear: function() {
             this.updateYear(this._year - 1);
         },
 
-        // Navegar al año siguiente
         _nextYear: function() {
             this.updateYear(this._year + 1);
         },
 
-        // Aplicar extensiones
         _applyExtensions: function (calendar) {
             if (this._options.extensions && this._options.extensions.length > 0) {
                 this._options.extensions.forEach(function(ext) {
                     if (typeof jsCalendar.ext === 'function') {
-                        // Sobrescribimos el método update para cada instancia de calendario
                         var originalUpdate = calendar._events.update;
                         calendar._events.update = function(month) {
                             originalUpdate.call(calendar, month);
@@ -173,27 +153,37 @@
             }
         },
 
-        // Selección de fechas
         _selectDatesForMonth: function (calendar, month) {
-            console.log("Processing month:", month);
             var datesToSelect = this._options.selectedDates.filter(function (date) {
                 var selectedDate = new Date(date);
-                console.log("Checking date:", selectedDate);
                 return selectedDate.getFullYear() === this._year && (selectedDate.getMonth() + 1) === month;
             }, this);
-            
+
             if (datesToSelect.length > 0) {
-                console.log("Original dates:", datesToSelect);
                 var dateObjects = datesToSelect.map(function (date) {
-                    var dateObj = new Date(date);
-                    console.log("Converted to Date object:", dateObj);
-                    return dateObj;
+                    return new Date(date);
                 });
-                console.log("Selecting dates:", dateObjects);
                 calendar.select(dateObjects);
             }
+        },
+
+        // Método para actualizar las fechas seleccionadas
+        updateSelectedDates: function(newSelectedDates) {
+            // Actualizar las fechas seleccionadas en las opciones
+            this._options.selectedDates = newSelectedDates;
+
+            // Limpiar las fechas seleccionadas actuales en cada calendario
+            for (var i = 0; i < 12; i++) {
+                /* // Desmarcar cada fecha individualmente
+                var selectedDates = this._calendars[i].getSelected();
+                selectedDates.forEach(date => this._calendars[i].unselect(date));  */
+                
+                // Desmarcar todas las fechas
+                this._calendars[i].clearselect();
+                // Seleccionar las nuevas fechas
+                this._selectDatesForMonth(this._calendars[i], i + 1); 
+            }
         }
-        
     };
 
     // Añadir la extensión 'custom-date-attribute'
@@ -215,7 +205,6 @@
     jsCalendar.ext('custom-weekend-attribute', {
         update: function(instance, month) {
             for (var i = month.days.length - 1; i >= 0; i--) {
-                // Cambia el estilo de las celdas del fin de semana
                 var dayElement = instance._elements.bodyCols[i];
                 if (month.days[i].getDay() === 0 || month.days[i].getDay() === 6) {
                     dayElement.style.backgroundColor = '#ffeb3b'; // Fondo amarillo para fines de semana
@@ -225,7 +214,6 @@
         }
     });
 
-    // Añadir el componente a la ventana global
     window.jsCalendarYearMonth = jsCalendarYearMonth;
 
 }(window, jsCalendar));
