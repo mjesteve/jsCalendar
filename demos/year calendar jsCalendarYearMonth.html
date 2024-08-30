@@ -14,8 +14,9 @@
     
     <!-- Cargar el nuevo CSS para el componente jsCalendarYearMonth -->
     <link rel="stylesheet" type="text/css" href="../source/jsCalendarYearMonth.css">
-
+<!--  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
     <!-- Cargar los scripts de jsCalendar -->
@@ -27,21 +28,11 @@
     <!-- <script type="text/javascript" src="../source/jsCalendarYearMonth_NoIIFE_prototype_Object.js"></script> -->
 
 </head>
-<body>
-
-    <!-- Outputs -->
-    Day click : <br>
-    <input id="my-input-a"><br>
-    Year change : <br>
-    <input id="my-input-b"><br>
+<body style="width: 2100px; text-align: left;">
 
     <div id="year-calendar"></div>
-
-    <!-- Outputs -->
-    Day click : <br>
-    <input id="my-input-a2"><br>
-    Year change : <br>
-    <input id="my-input-b2"><br>
+    
+    <div id="year-calendar1"></div>
 
     <div id="year-calendar2"></div>
 
@@ -52,79 +43,32 @@
         var calendarElement = document.getElementById('year-calendar');
         // Crear el calendario anual
         var yearCalendar = new jsCalendarYearMonth(calendarElement, {
-            year: 2023,
-            //themeClasses: ['classic-theme', "red"], // Combinación de tema y subtema
-            language: 'fr',
-            firstDayOfTheWeek: 2,
+            themeClasses: ['classic-theme', 'micro-theme', "red"],
             yearNavigator: true, // Mostrar el navegador de años
-            navIcons: 'fontawesome', // You need to include both the font-awesome css file
             yearNavigatorPosition: 'left',
-            extensions: ['custom-date-attribute','custom-weekend-attribute'], // Aplicar la extensión personalizada
-            selectedDates: [
-                "2024-01-15",
-                "2024-02-22",
-                "2024-03-10",
-                "2024-04-25",
-                "2024-05-30",
-                "2024-06-14",
-                "2024-07-19",
-                "2024-08-21",
-                "2024-09-02",
-                "2024-10-31",
-                "2024-11-01",
-                "2024-12-25"
-            ]
+            navIcons: 'fontawesome', // You need to include both the font-awesome css file
+            fontawesomePrefix: 'fa', //ver. 4.7
         });
 
-        // Capturar el evento onYearChanged
-        calendarElement.addEventListener('onYearChanged', function(event) {
-            var newYear = event.detail.newYear;
-            console.log("El año ha cambiado a:", newYear, event.detail.oldYear);
-            
-			var print_year = document.getElementById("my-input-b");
-            print_year.value = newYear;
+        var yearCalendar1 = new jsCalendarYearMonth(document.getElementById('year-calendar1'), {
+            themeClasses: ['classic-theme', 'micro-theme', "red"],
+            yearNavigator: true, // Mostrar el navegador de años
+            yearNavigatorPosition: 'left',
+            navIcons: 'fontawesome', // You need to include both the font-awesome css file
+            fontawesomePrefix: 'fas', //ver. 6
         });
-
-        calendarElement.addEventListener('onDateClick', function(event) {
-            console.log("Day click:", event.detail.date);
-            var print_date = document.getElementById("my-input-a");
-            print_date.value = jsCalendar.tools.dateToString(event.detail.date, 'DAY, DD MONTH YYYY', 'es');
-        });
-
-        // Simular un cambio de año
-        yearCalendar.updateYear(2024); // Esto debería despachar el evento y desencadenar el listener
 
         var yearCalendar2 = new jsCalendarYearMonth(document.getElementById('year-calendar2'), {
-            year: 2024,
-            themeClasses: ['black-theme'], // Combinación de tema y subtema
-            //theme: 'classic', // Cambia el tema según lo desees
+            themeClasses: ['classic-theme', 'micro-theme', "red"],
             language: 'es',
             yearNavigator: true, // Mostrar el navegador de años
-            yearNavigatorPosition: 'right',
+            yearNavigatorPosition: 'left',
             navIcons: 'material', // You need to include both the Material Design css file
-            extensions: ['custom-date-attribute','custom-weekend-attribute'], // Aplicar la extensión personalizada, 
-            selectedDates: ['2024-01-15', '2024-01-22'],
-            onYearChanged: function(newYear, oldYear) {
-                console.log("El año ha cambiado a:", newYear, oldYear);
-                // Aquí se puede agregar cualquier lógica adicional que se quiera ejecutar cuando el año cambie.
-                var print_year = document.getElementById("my-input-b2");
-                print_year.value = newYear;
-            },
-            onDateClick: function(event, date) {
-                console.log("Day click:", date);
-                // Aquí se puede agregar cualquier lógica adicional que se quiera ejecutar cuando el año cambie.
-                var print_date = document.getElementById("my-input-a2");
-				print_date.value = jsCalendar.tools.dateToString(date, 'DAY, DD MONTH YYYY', 'es');
-            }
         });
 
-        // Actualizar las fechas seleccionadas después de crear el componente
-        setTimeout(function() {
-            yearCalendar2.updateSelectedDates(['2024-02-14', '2024-06-18', '2024-12-25']);
-        }, 5000); // Actualiza las fechas después de 5 segundos
-
         var yearCalendar3 = new jsCalendarYearMonth(document.getElementById('year-calendar3'), { 
-            yearNavigatorPosition: 'right', language: 'es' });
+            yearNavigatorPosition: 'left', 
+            themeClasses: ['classic-theme', 'micro-theme', "red"],language: 'es' });
     </script>
 </body>
 </html>
