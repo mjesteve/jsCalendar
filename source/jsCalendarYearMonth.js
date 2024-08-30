@@ -18,7 +18,7 @@ function jsCalendarYearMonth(element, options) {
 }
 
 // Version
-jsCalendarYearMonth.version = 'v0.1.1-beta';
+jsCalendarYearMonth.version = 'v0.1.2-beta';
 
 // Asignar métodos individualmente al prototipo de jsCalendarYearMonth
 
@@ -41,6 +41,7 @@ jsCalendarYearMonth.prototype._parseOptions = function(options) {
         year: new Date().getFullYear(),
         themeClasses: [], // Array de clases de temas
         yearNavigator: true,
+        navIcons: false, //'fontawesome', 'material'
         extensions: [],
         selectedDates: [], // Array de fechas seleccionadas
         renderHeader: null, // Función personalizada para renderizar la cabecera
@@ -123,22 +124,60 @@ jsCalendarYearMonth.prototype._renderHeader = function(onPrevYear, onNextYear) {
         header.className = "year-header";
 
         if (this._options.yearNavigator) {
-            var prevNav = document.createElement("div");
-            prevNav.className = "jsCalendar-nav-left year-nav-prev";
-            prevNav.onclick = onPrevYear;
-            header.appendChild(prevNav);
+            
+            if (typeof this._options.navIcons === 'string' && (this._options.navIcons === 'fontawesome' || this._options.navIcons === 'material')) {
+
+                header.style.display = 'flex';
+                header.style.alignItems = 'center';
+                header.style.justifyContent = 'center';
+                header.style.gap = '10px'; // Separación entre elementos
+
+                const prevNav = document.createElement('i');
+                if (this._options.navIcons === 'fontawesome'){
+                    prevNav.className = 'fas fa-chevron-left'; // Icono de FontAwesome
+                } else {
+                    // Icono de Material Design para navegar al año anterior
+                    prevNav.className = "material-icons";
+                    prevNav.textContent = "chevron_left";  // Ícono de "flecha a la izquierda"
+                }
+                prevNav.style.cursor = 'pointer';
+                prevNav.onclick = onPrevYear; // Usar función pasada
+                header.appendChild(prevNav);
+            } else {
+                const prevNav = document.createElement("div");
+                prevNav.className = "jsCalendar-nav-left year-nav-prev";
+                prevNav.onclick = onPrevYear;
+                header.appendChild(prevNav);
+            }
         }
 
-        var title = document.createElement("div");
+        // Texto del año
+        var title = document.createElement('span');
+        //var title = document.createElement("div");
         title.className = "year-title";
         title.textContent = this._year;
         header.appendChild(title);
 
         if (this._options.yearNavigator) {
-            var nextNav = document.createElement("div");
-            nextNav.className = "jsCalendar-nav-right year-nav-next";
-            nextNav.onclick = onNextYear;
-            header.appendChild(nextNav);
+            
+            if (typeof this._options.navIcons === 'string' && (this._options.navIcons === 'fontawesome' || this._options.navIcons === 'material')) {
+
+                const nextNav = document.createElement('i');
+                if (this._options.navIcons === 'fontawesome'){
+                    nextNav.className = 'fas fa-chevron-right'; // Icono de FontAwesome
+                } else {
+                    nextNav.className = "material-icons";
+                    nextNav.textContent = "chevron_right";  // Ícono de "flecha a la derecha"
+                }
+                nextNav.style.cursor = 'pointer';
+                nextNav.onclick = onNextYear; // Usar función pasada
+                header.appendChild(nextNav);
+            } else {
+                const nextNav = document.createElement("div");
+                nextNav.className = "jsCalendar-nav-right year-nav-next";
+                nextNav.onclick = onNextYear;
+                header.appendChild(nextNav);
+            }
         }
     }
 
