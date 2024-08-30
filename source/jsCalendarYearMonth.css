@@ -5,27 +5,18 @@
     font-family: Tahoma, Geneva, sans-serif;
 }
 
-.jsCalendar tbody td.jsCalendar-weekend-days, 
-.jsCalendar.material-theme tbody td.jsCalendar-weekend-days, 
-.jsCalendar.classic-theme tbody td.jsCalendar-weekend-days, 
-.jsCalendar.clean-theme tbody td.jsCalendar-weekend-days, 
-.jsCalendar.black-theme tbody td.jsCalendar-weekend-days, 
-.jsCalendar.grey-theme tbody td.jsCalendar-weekend-days, 
-.jsCalendar.white-theme tbody td.jsCalendar-weekend-days {
-    font-weight: bold;
-}
-
 /* Encabezado del calendario con el título del año y los botones de navegación */
-.year-header {
+.jsCalendar-yearmonth .year-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 10px;
     position: relative;
     gap: 10px;
+    min-height: 45px;
 }
 
-.year-title {
+.jsCalendar-yearmonth .year-title {
     font-size: 24px;
     text-align: left;
     flex-grow: 1;
@@ -50,7 +41,7 @@
     font-family: "Courier New", Courier, monospace;
 }
 /* Flecha hacia la izquierda */
-.year-nav-prev::before {
+.jsCalendar-yearmonth .year-nav-prev::before {
     /* content: '◀'; Texto alternativo para la flecha izquierda */
     /* font-size: 24px; Ajusta el tamaño de la flecha */
     /* content: "⟨"; */
@@ -58,33 +49,43 @@
 }
 
 /* Flecha hacia la derecha */
-.year-nav-next::before {
+.jsCalendar-yearmonth .year-nav-next::before {
     /*content: '▶'; Texto alternativo para la flecha derecha */
     /* font-size: 24px; Ajusta el tamaño de la flecha */
     /* content: "⟩"; */
     content: "›";
 }
 
-.material-icons.iconbutton {
+.jsCalendar-yearmonth .material-icons.iconbutton {
     font-size: 36px;
     font-weight: normal;
 }
 
 /* Font-Awesome version > 4 */
-.fas.iconbutton {
+.jsCalendar-yearmonth .fas.iconbutton {
     font-weight: 600;
     font-size: 24px;
     text-align: center;
 }
 
 /* Font-Awesome version < 5 */
-.fa.iconbutton {
+.jsCalendar-yearmonth .fa.iconbutton {
     font-weight: 600;
     font-size: 28px;
     text-align: center;
 }
 
 /* Estilos para cada instancia del calendario */
-.jsCalendar {
+.jsCalendar-yearmonth .jsCalendar {
     display: inline-block;
+}
+
+.jsCalendar-yearmonth .jsCalendar tbody td.jsCalendar-weekend-days, 
+.jsCalendar-yearmonth .jsCalendar.material-theme tbody td.jsCalendar-weekend-days, 
+.jsCalendar-yearmonth .jsCalendar.classic-theme tbody td.jsCalendar-weekend-days, 
+.jsCalendar-yearmonth .jsCalendar.clean-theme tbody td.jsCalendar-weekend-days, 
+.jsCalendar-yearmonth .jsCalendar.black-theme tbody td.jsCalendar-weekend-days, 
+.jsCalendar-yearmonth .jsCalendar.grey-theme tbody td.jsCalendar-weekend-days, 
+.jsCalendar-yearmonth .jsCalendar.white-theme tbody td.jsCalendar-weekend-days {
+    font-weight: bold;
 }

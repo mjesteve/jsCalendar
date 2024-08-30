@@ -51,6 +51,7 @@ jsCalendarYearMonth.prototype._parseOptions = function(options) {
         onNextYear: null,    // Función personalizada para navegar al año siguiente
         onYearChanged: null,  // Nueva opción para onYearChanged
         onDateClick: null,     // Nueva opción para onDateClick
+        customYearTitle:null,   // Función personalizada que devolverá el texto a incluir como título.
     };
     return Object.assign({}, defaultOptions, options);
 };
@@ -130,32 +131,25 @@ jsCalendarYearMonth.prototype._renderHeader = function(onPrevYear, onNextYear) {
         title.className = "year-title";
         var txttitle = this._year;
 
+        // Verificar si hay una función personalizada para renderizar el título del año
+        if (typeof this._options.customYearTitle === 'function') {
+            txttitle = this._options.customYearTitle(this._year);
+        }
+
         var prevNav;
         var nextNav;
         if (this._options.yearNavigator) {
             if (typeof this._options.navIcons === 'string' && (this._options.navIcons === 'fontawesome' || this._options.navIcons === 'material')) {
-                /* header.style.display = 'flex';
-                header.style.alignItems = 'center';
-                header.style.justifyContent = 'center'; */
-
                 prevNav = document.createElement('i');
                 if (this._options.navIcons === 'fontawesome'){
-                    txttitle += '  ver.' ;
-                    if( this._options.fontawesomePrefix == 'fa'){
-                        txttitle += '4.7';
-                    } else {
-                        txttitle += '6';
-                    }
                     prevNav.className = this._options.fontawesomePrefix +' fa-angle-left'; // Icono de FontAwesome - chevron
                 } else {
                     // Icono de Material Design para navegar al año anterior
-                    txttitle += '  material-icons.' ;
                     prevNav.className = "material-icons";
                     prevNav.textContent = "chevron_left";  // Ícono de "flecha a la izquierda"
                 }
                 prevNav.style.cursor = 'pointer';
             } else {
-                txttitle += '  Texto.' ;
                 prevNav = document.createElement("div");
                 prevNav.className = "jsCalendar-nav-left year-nav-prev";
             }

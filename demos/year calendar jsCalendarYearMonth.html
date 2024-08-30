@@ -43,11 +43,14 @@
         var calendarElement = document.getElementById('year-calendar');
         // Crear el calendario anual
         var yearCalendar = new jsCalendarYearMonth(calendarElement, {
-            themeClasses: ['classic-theme', 'micro-theme', "red"],
+            themeClasses: ['micro-theme', "red"],
             yearNavigator: true, // Mostrar el navegador de años
             yearNavigatorPosition: 'left',
             navIcons: 'fontawesome', // You need to include both the font-awesome css file
             fontawesomePrefix: 'fa', //ver. 4.7
+            customYearTitle: function(year) {
+                return "Año: " + year + '<strong> (FontAwesome 4.7) </strong>';  // Ejemplo de personalización
+            },
         });
 
         var yearCalendar1 = new jsCalendarYearMonth(document.getElementById('year-calendar1'), {
@@ -59,7 +62,7 @@
         });
 
         var yearCalendar2 = new jsCalendarYearMonth(document.getElementById('year-calendar2'), {
-            themeClasses: ['classic-theme', 'micro-theme', "red"],
+            themeClasses: ['material-theme', 'micro-theme', "red"],
             language: 'es',
             yearNavigator: true, // Mostrar el navegador de años
             yearNavigatorPosition: 'left',
@@ -68,7 +71,7 @@
 
         var yearCalendar3 = new jsCalendarYearMonth(document.getElementById('year-calendar3'), { 
             yearNavigatorPosition: 'left', 
-            themeClasses: ['classic-theme', 'micro-theme', "red"],language: 'es' });
+            themeClasses: ['clean-theme', 'micro-theme', "red"],language: 'es' });
     </script>
 </body>
 </html>
