@@ -23,6 +23,7 @@
     justify-content: space-between;
     padding: 10px 32px;
     position: relative;
+    gap: 10px;
 }
 
 .year-title {

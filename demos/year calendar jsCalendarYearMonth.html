@@ -58,6 +58,7 @@
             firstDayOfTheWeek: 2,
             yearNavigator: true, // Mostrar el navegador de años
             navIcons: 'fontawesome', // You need to include both the font-awesome css file
+            yearNavigatorPosition: 'left',
             extensions: ['custom-date-attribute','custom-weekend-attribute'], // Aplicar la extensión personalizada
             selectedDates: [
                 "2024-01-15",
@@ -99,6 +100,7 @@
             //theme: 'classic', // Cambia el tema según lo desees
             language: 'es',
             yearNavigator: true, // Mostrar el navegador de años
+            yearNavigatorPosition: 'right',
             navIcons: 'material', // You need to include both the Material Design css file
             extensions: ['custom-date-attribute','custom-weekend-attribute'], // Aplicar la extensión personalizada, 
             selectedDates: ['2024-01-15', '2024-01-22'],
@@ -121,7 +123,8 @@
             yearCalendar2.updateSelectedDates(['2024-02-14', '2024-06-18', '2024-12-25']);
         }, 5000); // Actualiza las fechas después de 5 segundos
 
-        var yearCalendar3 = new jsCalendarYearMonth(document.getElementById('year-calendar3'), { language: 'es' });
+        var yearCalendar3 = new jsCalendarYearMonth(document.getElementById('year-calendar3'), { 
+            yearNavigatorPosition: 'right', language: 'es' });
     </script>
 </body>
 </html>

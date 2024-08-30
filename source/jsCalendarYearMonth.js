@@ -41,6 +41,7 @@ jsCalendarYearMonth.prototype._parseOptions = function(options) {
         year: new Date().getFullYear(),
         themeClasses: [], // Array de clases de temas
         yearNavigator: true,
+        yearNavigatorPosition : 'both', //'both', 'left', 'right'
         navIcons: false, //'fontawesome', 'material'
         extensions: [],
         selectedDates: [], // Array de fechas seleccionadas
@@ -123,16 +124,15 @@ jsCalendarYearMonth.prototype._renderHeader = function(onPrevYear, onNextYear) {
         header = document.createElement("div");
         header.className = "year-header";
 
+        var prevNav;
+        var nextNav;
         if (this._options.yearNavigator) {
-            
             if (typeof this._options.navIcons === 'string' && (this._options.navIcons === 'fontawesome' || this._options.navIcons === 'material')) {
-
                 header.style.display = 'flex';
                 header.style.alignItems = 'center';
                 header.style.justifyContent = 'center';
-                header.style.gap = '10px'; // Separación entre elementos
 
-                const prevNav = document.createElement('i');
+                prevNav = document.createElement('i');
                 if (this._options.navIcons === 'fontawesome'){
                     prevNav.className = 'fas fa-chevron-left'; // Icono de FontAwesome
                 } else {
@@ -141,28 +141,21 @@ jsCalendarYearMonth.prototype._renderHeader = function(onPrevYear, onNextYear) {
                     prevNav.textContent = "chevron_left";  // Ícono de "flecha a la izquierda"
                 }
                 prevNav.style.cursor = 'pointer';
-                prevNav.onclick = onPrevYear; // Usar función pasada
-                header.appendChild(prevNav);
             } else {
-                const prevNav = document.createElement("div");
+                prevNav = document.createElement("div");
                 prevNav.className = "jsCalendar-nav-left year-nav-prev";
-                prevNav.onclick = onPrevYear;
-                header.appendChild(prevNav);
             }
+            prevNav.onclick = onPrevYear; // Usar función pasada
         }
 
         // Texto del año
         var title = document.createElement('span');
-        //var title = document.createElement("div");
         title.className = "year-title";
         title.textContent = this._year;
-        header.appendChild(title);
 
         if (this._options.yearNavigator) {
-            
             if (typeof this._options.navIcons === 'string' && (this._options.navIcons === 'fontawesome' || this._options.navIcons === 'material')) {
-
-                const nextNav = document.createElement('i');
+                nextNav = document.createElement('i');
                 if (this._options.navIcons === 'fontawesome'){
                     nextNav.className = 'fas fa-chevron-right'; // Icono de FontAwesome
                 } else {
@@ -170,12 +163,27 @@ jsCalendarYearMonth.prototype._renderHeader = function(onPrevYear, onNextYear) {
                     nextNav.textContent = "chevron_right";  // Ícono de "flecha a la derecha"
                 }
                 nextNav.style.cursor = 'pointer';
-                nextNav.onclick = onNextYear; // Usar función pasada
+            } else {
+                nextNav = document.createElement("div");
+                nextNav.className = "jsCalendar-nav-right year-nav-next";
+            }
+            nextNav.onclick = onNextYear;
+        }
+
+        if (!this._options.yearNavigator) {
+            header.appendChild(title);
+        } else {
+            if (this._options.yearNavigatorPosition === 'left') {
+                header.appendChild(prevNav);
+                header.appendChild(nextNav);
+                header.appendChild(title);
+            } else if (this._options.yearNavigatorPosition === 'right') {
+                header.appendChild(title);
+                header.appendChild(prevNav);
                 header.appendChild(nextNav);
             } else {
-                const nextNav = document.createElement("div");
-                nextNav.className = "jsCalendar-nav-right year-nav-next";
-                nextNav.onclick = onNextYear;
+                header.appendChild(prevNav);
+                header.appendChild(title);
                 header.appendChild(nextNav);
             }
         }
@@ -285,7 +293,6 @@ jsCalendar.ext('custom-weekend-attribute', {
         for (var i = month.days.length - 1; i >= 0; i--) {
             var dayElement = instance._elements.bodyCols[i];
             if (month.days[i].getDay() === 0 || month.days[i].getDay() === 6) {
-                // dayElement.style.backgroundColor = '#ffeb3b'; // Fondo amarillo para fines de semana
                 dayElement.classList.add('jsCalendar-weekend-days');
             }
         }
