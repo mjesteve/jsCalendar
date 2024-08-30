@@ -28,7 +28,7 @@
     <!-- <script type="text/javascript" src="../source/jsCalendarYearMonth_NoIIFE_prototype_Object.js"></script> -->
 
 </head>
-<body style="width: 2100px; text-align: left;">
+<body>
 
     <div id="year-calendar"></div>
     
@@ -43,7 +43,7 @@
         var calendarElement = document.getElementById('year-calendar');
         // Crear el calendario anual
         var yearCalendar = new jsCalendarYearMonth(calendarElement, {
-            themeClasses: ['micro-theme', "red"],
+            themeClasses: ["red"],
             yearNavigator: true, // Mostrar el navegador de años
             yearNavigatorPosition: 'left',
             navIcons: 'fontawesome', // You need to include both the font-awesome css file
@@ -52,7 +52,7 @@
                 return "Año: " + year + '<strong> (FontAwesome 4.7) </strong>';  // Ejemplo de personalización
             },
             responsiveLayout: false,
-            monthsPerRow: 6,
+            monthsPerRow: 4,
         });
 
         var yearCalendar1 = new jsCalendarYearMonth(document.getElementById('year-calendar1'), {

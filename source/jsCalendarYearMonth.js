@@ -55,7 +55,20 @@ jsCalendarYearMonth.prototype._parseOptions = function(options) {
         onYearChanged: null,  // Nueva opción para onYearChanged
         onDateClick: null,     // Nueva opción para onDateClick
     };
-    return Object.assign({}, defaultOptions, options);
+
+    // Crear un objeto de opciones combinando las opciones predeterminadas y las proporcionadas
+    var parsedOptions = Object.assign({}, defaultOptions, options);
+
+    // Validar que monthsPerRow sea un número entero en el rango de 1 a 12
+    if (typeof parsedOptions.monthsPerRow !== 'number' || 
+        parsedOptions.monthsPerRow < 1 || 
+        parsedOptions.monthsPerRow > 12 || 
+        !Number.isInteger(parsedOptions.monthsPerRow)) {
+        console.warn(`Valor inválido para monthsPerRow (${parsedOptions.monthsPerRow}). Se usará el valor predeterminado de ${defaultOptions.monthsPerRow}.`);
+        parsedOptions.monthsPerRow = defaultOptions.monthsPerRow;
+    }
+
+    return parsedOptions;
 };
 
 // Método _render
