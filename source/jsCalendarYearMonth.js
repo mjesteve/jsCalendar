@@ -18,7 +18,7 @@ function jsCalendarYearMonth(element, options) {
 }
 
 // Version
-jsCalendarYearMonth.version = 'v0.1.2-beta';
+jsCalendarYearMonth.version = 'v0.1.3-beta';
 
 // Asignar métodos individualmente al prototipo de jsCalendarYearMonth
 
@@ -47,17 +47,98 @@ jsCalendarYearMonth.prototype._parseOptions = function(options) {
         extensions: [],
         selectedDates: [], // Array de fechas seleccionadas
         renderHeader: null, // Función personalizada para renderizar la cabecera
+        customYearTitle:null,   // Función personalizada que devolverá el texto a incluir como título.
+        responsiveLayout: true, // true: inline, false: hace caso a monthsPerRow
+        monthsPerRow: 4, // Número de meses por fila
         onPrevYear: null,   // Función personalizada para navegar al año anterior
         onNextYear: null,    // Función personalizada para navegar al año siguiente
         onYearChanged: null,  // Nueva opción para onYearChanged
         onDateClick: null,     // Nueva opción para onDateClick
-        customYearTitle:null,   // Función personalizada que devolverá el texto a incluir como título.
     };
     return Object.assign({}, defaultOptions, options);
 };
 
 // Método _render
 jsCalendarYearMonth.prototype._render = function() {
+    if( this._options.responsiveLayout ) {
+        this._renderResponsive();
+    } else {
+        this._renderColsRow();
+
+        var mpr = this._options.monthsPerRow;
+        var rowContainers = document.querySelectorAll('.year-row-container');
+        rowContainers.forEach(function(rowContainer) {
+            console.log(mpr);
+            rowContainer.style.setProperty('--months-per-row', mpr);
+        });
+    }
+};
+
+// Método _render no responsive. cols per row.
+jsCalendarYearMonth.prototype._renderColsRow = function() {
+    var wrapper = this._container;
+
+    // Renderizar la cabecera
+    var header = this._renderHeader(this._prevYear.bind(this), this._nextYear.bind(this));
+    wrapper.appendChild(header);
+
+    var rowContainer = document.createElement("div");
+    rowContainer.className = "year-row-container";
+    wrapper.appendChild(rowContainer);    
+
+    for (var i = 0; i < 12; i++) {
+        if (i % this._options.monthsPerRow === 0 && i !== 0) {
+            rowContainer = document.createElement("div");
+            rowContainer.className = "year-row-container";
+            wrapper.appendChild(rowContainer);
+        }
+
+        var monthContainer = document.createElement("div");
+        monthContainer.className = "month-container";
+        rowContainer.appendChild(monthContainer);
+
+        this._options.themeClasses.forEach(function(themeClass) {
+            monthContainer.classList.add(themeClass);
+        });
+
+        var calendar = jsCalendar.new(monthContainer, 0, {
+            language: this._options.language,
+            zeroFill: this._options.zeroFill,
+            monthFormat: this._options.monthFormat,
+            dayFormat: this._options.dayFormat,
+            firstDayOfTheWeek: !this._options.firstDayOfTheWeek ? undefined : this._options.firstDayOfTheWeek,
+            navigator: false,
+            min: this._options.min,
+            max: this._options.max,
+            onMonthRender: this._options.onMonthRender,
+            onDayRender: this._options.onDayRender,
+            onDateRender: this._options.onDateRender,
+        });
+        calendar.goto(new Date(this._year, i, 1));
+
+        // Add target listeners
+        var parent = this;
+        // Calendar click handler
+        calendar.onDateClick(function(event, date) {
+            if (typeof parent._options.onDateClick === 'function') {
+                parent._options.onDateClick(event, date);
+            }
+
+            // Dispatchar el evento onDateClick
+            var event = new CustomEvent('onDateClick', {
+                detail: { event: event, date: date }
+            });
+            wrapper.dispatchEvent(event);
+        });
+
+        this._applyExtensions(calendar);
+        this._selectDatesForMonth(calendar, i + 1);
+        this._calendars.push(calendar);
+    }
+};
+
+// Método _render responsive
+jsCalendarYearMonth.prototype._renderResponsive = function() {
     var wrapper = this._container;
 
     // Vincular el contexto correcto (this) a las funciones de navegación
@@ -66,7 +147,6 @@ jsCalendarYearMonth.prototype._render = function() {
 
     // Renderizar la cabecera
     var header = this._renderHeader(onPrevYear, onNextYear);
-
     wrapper.appendChild(header);
 
     // Crear calendarios mensuales
@@ -109,9 +189,7 @@ jsCalendarYearMonth.prototype._render = function() {
         });
 
         this._applyExtensions(calendar);
-
         this._selectDatesForMonth(calendar, i + 1);
-
         this._calendars.push(calendar);
     }
 };

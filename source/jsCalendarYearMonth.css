@@ -75,6 +75,26 @@
     text-align: center;
 }
 
+/* Layout no Responsive - Monts per row */
+.year-row-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    --months-per-row: 3; /* Valor por defecto */
+}
+
+.month-container {
+    flex-grow: 1;
+    flex-basis: calc(100% / var(--months-per-row) - 10px);
+    margin-right: 10px;
+    box-sizing: border-box;
+}
+
+.year-row-container .month-container:last-child {
+    margin-right: 0;
+}
+
+
 /* Estilos para cada instancia del calendario */
 .jsCalendar-yearmonth .jsCalendar {
     display: inline-block;
