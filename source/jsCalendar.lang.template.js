@@ -59,7 +59,33 @@
             'Friday',
             'Saturday'
             // STOP EDIT ~~~~~~~~~~~~~~~~~~~~~~~~
-        ]
+        ],
+        // Short days of the week
+        weekdaysShort : [
+            // EDIT HERE THE DAYS ~~~~~~~~~~~~~~~
+            'Su',
+            'Mo',
+            'Tu',
+            'We',
+            'Th',
+            'Fr',
+            'Sa'
+            // STOP EDIT ~~~~~~~~~~~~~~~~~~~~~~~~
+        ],
+        // Min-Short days of the week
+        weekdaysMin : [
+            // EDIT HERE THE DAYS ~~~~~~~~~~~~~~~
+            'S',
+            'M',
+            'T',
+            'W',
+            'T',
+            'F',
+            'S'
+            // STOP EDIT ~~~~~~~~~~~~~~~~~~~~~~~~
+        ],
+        // First Day Week
+        firstDayOfTheWeek : 1
     });
 
 })();

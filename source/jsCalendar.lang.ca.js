@@ -53,7 +53,33 @@
             'Dijous',
             'Divendres',
             'Dissabte'
-        ]
+        ],
+        // Short days of the week
+        weekdaysShort : [
+            // EDIT HERE THE DAYS ~~~~~~~~~~~~~~~
+            'Dg',
+            'Dl',
+            'Dt',
+            'Dc',
+            'Dj',
+            'Dv',
+            'Ds'
+            // STOP EDIT ~~~~~~~~~~~~~~~~~~~~~~~~
+        ],
+        // Min-Short days of the week
+        weekdaysMin : [
+            // EDIT HERE THE DAYS ~~~~~~~~~~~~~~~
+            'Dg',
+            'Dl',
+            'Dt',
+            'Dc',
+            'Dj',
+            'Dv',
+            'Ds'
+            // STOP EDIT ~~~~~~~~~~~~~~~~~~~~~~~~
+        ],
+        // First Day Week
+        firstDayOfTheWeek : 2,
     });
 
 })();
