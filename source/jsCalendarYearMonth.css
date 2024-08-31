@@ -24,24 +24,29 @@
 }
 
 /* Estilos para los controles de navegación de año */
-.jsCalendar-yearmonth .iconbutton,
-.jsCalendar-yearmonth .year-nav-prev,
-.jsCalendar-yearmonth .year-nav-next {
+.jsCalendar-yearmonth .year-nav {
     cursor: pointer;
+    pointer-events: all;
     font-weight: bold;
     width: 32px;
+    color: inherit;
+}
+
+.jsCalendar-yearmonth .year-nav[disabled] {
+    cursor: unset;
+    pointer-events: none;
+    color: #CACACA; /* .jsCalendar tbody td.jsCalendar-unselectable */
 }
 
 /* Flechas nav */
-.jsCalendar-yearmonth .jsCalendar-nav-left, 
-.jsCalendar-yearmonth .jsCalendar-nav-right {
+.jsCalendar-yearmonth .year-nav.textbutton {
     text-align: center;
     font-size: 40px;
     font-weight: 600;
     font-family: "Courier New", Courier, monospace;
 }
 /* Flecha hacia la izquierda */
-.jsCalendar-yearmonth .year-nav-prev::before {
+.jsCalendar-yearmonth .textbutton.prev::before {
     /* content: '◀'; Texto alternativo para la flecha izquierda */
     /* font-size: 24px; Ajusta el tamaño de la flecha */
     /* content: "⟨"; */
@@ -49,27 +54,27 @@
 }
 
 /* Flecha hacia la derecha */
-.jsCalendar-yearmonth .year-nav-next::before {
+.jsCalendar-yearmonth .textbutton.next::before {
     /*content: '▶'; Texto alternativo para la flecha derecha */
     /* font-size: 24px; Ajusta el tamaño de la flecha */
     /* content: "⟩"; */
     content: "›";
 }
 
-.jsCalendar-yearmonth .material-icons.iconbutton {
+.jsCalendar-yearmonth .year-nav.iconbutton.material-icons {
     font-size: 36px;
     font-weight: normal;
 }
 
 /* Font-Awesome version > 4 */
-.jsCalendar-yearmonth .fas.iconbutton {
+.jsCalendar-yearmonth .year-nav.iconbutton.fas {
     font-weight: 600;
     font-size: 24px;
     text-align: center;
 }
 
 /* Font-Awesome version < 5 */
-.jsCalendar-yearmonth .fa.iconbutton {
+.jsCalendar-yearmonth .year-nav.iconbutton.fa {
     font-weight: 600;
     font-size: 28px;
     text-align: center;

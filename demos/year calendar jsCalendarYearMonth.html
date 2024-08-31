@@ -43,7 +43,7 @@
         var calendarElement = document.getElementById('year-calendar');
         // Crear el calendario anual
         var yearCalendar = new jsCalendarYearMonth(calendarElement, {
-            themeClasses: ["red"],
+            themeClasses: ["red"], year: 2019,
             yearNavigator: true, // Mostrar el navegador de años
             yearNavigatorPosition: 'left',
             navIcons: 'fontawesome', // You need to include both the font-awesome css file
@@ -51,6 +51,13 @@
             customYearTitle: function(year) {
                 return "Año: " + year + '<strong> (FontAwesome 4.7) </strong>';  // Ejemplo de personalización
             },
+            minYear: 2020, maxYear: 2025,
+            onPrevYear: function() {
+                this.updateYear(this._year - 1);
+            },
+            onNextYear: function() {
+                this.updateYear(this._year + 1);
+            }
         });
 
         var yearCalendar1 = new jsCalendarYearMonth(document.getElementById('year-calendar1'), {
@@ -61,7 +68,11 @@
             fontawesomePrefix: 'fas', //ver. 6
             responsiveLayout: false,
             monthsPerRow: 4,
+            minYear: 2024, maxYear: 2024,
         });
+
+// Simular un cambio de año
+yearCalendar1.updateYear(2030);
 
         var yearCalendar2 = new jsCalendarYearMonth(document.getElementById('year-calendar2'), {
             themeClasses: ['material-theme', 'micro-theme', "red"],

@@ -32,13 +32,13 @@ jsCalendarYearMonth.prototype._parseOptions = function(options) {
         firstDayOfTheWeek: false,
         navigator: false,
         navigatorPosition: 'both',
-        min: false,
-        max: false,
         onMonthRender: false,
         onDayRender: false,
         onDateRender: false,
 
         year: new Date().getFullYear(),
+        minYear: 0,
+        maxYear: 0,
         themeClasses: [], // Array de clases de temas
         yearNavigator: true,
         yearNavigatorPosition : 'both', //'both', 'left', 'right'
@@ -59,6 +59,31 @@ jsCalendarYearMonth.prototype._parseOptions = function(options) {
     // Crear un objeto de opciones combinando las opciones predeterminadas y las proporcionadas
     var parsedOptions = Object.assign({}, defaultOptions, options);
 
+    // Set min annuary year
+    if (typeof parsedOptions.minYear !== 'undefined' && parsedOptions.minYear !== '0' && parsedOptions.minYear !== 0) {
+        if(!Number.isInteger(parsedOptions.minYear) || parsedOptions.minYear < 0) {
+            parsedOptions.minYear = defaultOptions.minYear;            
+        } else {
+            if( parsedOptions.year < parsedOptions.minYear ){
+                parsedOptions.year = parsedOptions.minYear;
+            }
+        }
+    } else {
+        parsedOptions.minYear = defaultOptions.minYear;
+    }
+    // Set max annuary year
+    if (typeof parsedOptions.maxYear !== 'undefined' && parsedOptions.maxYear !== '0' && parsedOptions.maxYear !== 0) {
+        if(!Number.isInteger(parsedOptions.maxYear) || parsedOptions.maxYear < 0) {
+            parsedOptions.maxYear = defaultOptions.maxYear;       
+        } else {
+            if( parsedOptions.year > parsedOptions.maxYear ){
+                parsedOptions.year = parsedOptions.maxYear;
+            }
+        }
+    } else {
+        parsedOptions.maxYear = defaultOptions.maxYear;
+    }
+
     // Validar que monthsPerRow sea un número entero en el rango de 1 a 12
     if (!parsedOptions.responsiveLayout && (typeof parsedOptions.monthsPerRow !== 'number' || 
         parsedOptions.monthsPerRow < 1 || 
@@ -76,15 +101,13 @@ jsCalendarYearMonth.prototype._render = function() {
     if( this._options.responsiveLayout ) {
         this._renderResponsive();
     } else {
-        // Obtener el ancho mínimo para el calendario basado en el tema
-        // var minWidth = this._getMinWidthForCalendar();
         this._minwidthmoth = 0;
 
         this._renderColsRow();
 
         var mpr = this._options.monthsPerRow;
         var mwpr = this._minwidthmoth;
-        var rowContainers = document.querySelectorAll('.year-row-container');
+        var rowContainers = this._container.querySelectorAll('.year-row-container');
         rowContainers.forEach(function(rowContainer) {
             console.log(mpr);
             console.log(mwpr);
@@ -92,6 +115,8 @@ jsCalendarYearMonth.prototype._render = function() {
             rowContainer.style.setProperty('--min-width-month', mwpr);
         });
     }
+
+    this._updateButtonsNavYear();    
 };
 
 // Método _render no responsive. cols per row.
@@ -128,8 +153,6 @@ jsCalendarYearMonth.prototype._renderColsRow = function() {
             dayFormat: this._options.dayFormat,
             firstDayOfTheWeek: !this._options.firstDayOfTheWeek ? undefined : this._options.firstDayOfTheWeek,
             navigator: false,
-            min: this._options.min,
-            max: this._options.max,
             onMonthRender: this._options.onMonthRender,
             onDayRender: this._options.onDayRender,
             onDateRender: this._options.onDateRender,
@@ -218,50 +241,6 @@ jsCalendarYearMonth.prototype._renderResponsive = function() {
     }
 };
 
-jsCalendarYearMonth.prototype._getMinWidthForCalendar = function() {
-    // Crear un contenedor temporal
-    var tempContainer = document.createElement('div');
-    tempContainer.style.position = 'absolute';
-    tempContainer.style.visibility = 'hidden';
-    tempContainer.style.width = 'auto';
-    tempContainer.style.height = 'auto';
-    tempContainer.style.pointerEvents = 'none';
-
-    // Crear un sub-componente jsCalendar temporal
-    var tempCalendarContainer = document.createElement('div');
-    tempCalendarContainer.className = "year-row-container";
-    tempContainer.appendChild(tempCalendarContainer);
-
-    var monthContainer = document.createElement("div");
-    monthContainer.className = "month-container";
-    tempCalendarContainer.appendChild(monthContainer);
-
-    // Añadir las clases de tema
-    this._options.themeClasses.forEach(function(themeClass) {
-        monthContainer.classList.add(themeClass);
-    });
-
-    // Añadir al DOM
-    document.body.appendChild(tempContainer);
-
-    // Crear el calendario temporal
-    var tempCalendar = jsCalendar.new(monthContainer, 0, {
-        language: this._options.language,
-        zeroFill: this._options.zeroFill,
-        monthFormat: this._options.monthFormat,
-        dayFormat: this._options.dayFormat,
-        navigator: false,
-    });
-
-    // Medir el ancho mínimo necesario
-    var minWidth = tempCalendarContainer.offsetWidth;
-
-    // Eliminar el calendario temporal
-    document.body.removeChild(tempContainer);
-
-    return minWidth;
-};
-
 // Método _renderHeader
 jsCalendarYearMonth.prototype._renderHeader = function(onPrevYear, onNextYear) {
     var header;
@@ -287,17 +266,18 @@ jsCalendarYearMonth.prototype._renderHeader = function(onPrevYear, onNextYear) {
         if (this._options.yearNavigator) {
             if (typeof this._options.navIcons === 'string' && (this._options.navIcons === 'fontawesome' || this._options.navIcons === 'material')) {
                 prevNav = document.createElement('i');
+                prevNav.className = "year-nav iconbutton prev ";
                 if (this._options.navIcons === 'fontawesome'){
-                    prevNav.className = this._options.fontawesomePrefix +' fa-angle-left'; // Icono de FontAwesome - chevron
+                    prevNav.className += this._options.fontawesomePrefix +' fa-angle-left'; // Icono de FontAwesome - chevron
                 } else {
                     // Icono de Material Design para navegar al año anterior
-                    prevNav.className = "material-icons";
+                    prevNav.className += "material-icons";
                     prevNav.textContent = "chevron_left";  // Ícono de "flecha a la izquierda"
                 }
                 prevNav.style.cursor = 'pointer';
             } else {
                 prevNav = document.createElement("div");
-                prevNav.className = "jsCalendar-nav-left year-nav-prev";
+                prevNav.className = "year-nav textbutton prev";
             }
             prevNav.onclick = onPrevYear; // Usar función pasada
         }
@@ -306,19 +286,17 @@ jsCalendarYearMonth.prototype._renderHeader = function(onPrevYear, onNextYear) {
 
             if (typeof this._options.navIcons === 'string' && (this._options.navIcons === 'fontawesome' || this._options.navIcons === 'material')) {
                 nextNav = document.createElement('i');
+                nextNav.className = "year-nav iconbutton next ";
                 if (this._options.navIcons === 'fontawesome'){
-                    nextNav.className = this._options.fontawesomePrefix +' fa-angle-right'; // Icono de FontAwesome
+                    nextNav.className += this._options.fontawesomePrefix +' fa-angle-right'; // Icono de FontAwesome
                 } else {
-                    nextNav.className = "material-icons";
+                    nextNav.className += "material-icons";
                     nextNav.textContent = "chevron_right";  // Ícono de "flecha a la derecha"
                 }
                 nextNav.style.cursor = 'pointer';
-            
-                prevNav.classList.add('iconbutton');
-                nextNav.classList.add('iconbutton');
             } else {
                 nextNav = document.createElement("div");
-                nextNav.className = "jsCalendar-nav-right year-nav-next";
+                nextNav.className = "year-nav textbutton next";
             }
             nextNav.onclick = onNextYear;
         }
@@ -349,26 +327,63 @@ jsCalendarYearMonth.prototype._renderHeader = function(onPrevYear, onNextYear) {
 
 // Método updateYear
 jsCalendarYearMonth.prototype.updateYear = function(newYear) {
-    const oldYear = this._year;
-    this._year = newYear;
+    if(newYear > 0 && this._year !== newYear && 
+        (this._options.minYear === 0 || (this._options.minYear !== 0 && newYear >= this._options.minYear)) && 
+        (this._options.maxYear === 0 || (this._options.maxYear !== 0 && newYear <= this._options.maxYear))
+    ){
 
-    var title = this._container.querySelector(".year-title");
-    title.textContent = this._year;
+        const oldYear = this._year;
+        this._year = newYear;
 
-    for (var i = 0; i < 12; i++) {
-        this._calendars[i].goto(new Date(this._year, i, 1));
-        this._selectDatesForMonth(this._calendars[i], i + 1);
+        var title = this._container.querySelector(".year-title");
+        var txttitle = this._year;
+
+        // Verificar si hay una función personalizada para renderizar el título del año
+        if (typeof this._options.customYearTitle === 'function') {
+            txttitle = this._options.customYearTitle(this._year);
+        }
+        title.textContent = txttitle;
+
+        for (var i = 0; i < 12; i++) {
+            this._calendars[i].goto(new Date(this._year, i, 1));
+            this._selectDatesForMonth(this._calendars[i], i + 1);
+        }
+
+        // Dispatchar el evento onYearChanged
+        var event = new CustomEvent('onYearChanged', {
+            detail: { newYear: this._year, oldYear: oldYear }
+        });
+        this._container.dispatchEvent(event);
+
+        // Ejecutar la función onYearChanged si está definida en las opciones
+        if (typeof this._options.onYearChanged === 'function') {
+            this._options.onYearChanged(this._year, oldYear);
+        }
     }
 
-    // Dispatchar el evento onYearChanged
-    var event = new CustomEvent('onYearChanged', {
-        detail: { newYear: this._year, oldYear: oldYear }
-    });
-    this._container.dispatchEvent(event);
+    this._updateButtonsNavYear();
+};
 
-    // Ejecutar la función onYearChanged si está definida en las opciones
-    if (typeof this._options.onYearChanged === 'function') {
-        this._options.onYearChanged(this._year, oldYear);
+// Método _updateButtonsNavYear
+jsCalendarYearMonth.prototype._updateButtonsNavYear = function() {
+    if(!this._options.yearNavigator || (this._options.minYear === 0 && this._options.maxYear === 0)){
+        return;
+    }
+
+    // Control de deshabilitación para el botón "Anterior"
+    var navButtonPrev = this._container.getElementsByClassName('prev')[0];
+    if(navButtonPrev !== undefined && this._options.minYear !== 0 && this._year <= this._options.minYear){
+        navButtonPrev.setAttribute('disabled','');
+    } else if (navButtonPrev) {
+        navButtonPrev.removeAttribute('disabled');
+    }
+
+    // Control de deshabilitación para el botón "Siguiente"
+    var navButtonNext = this._container.getElementsByClassName('next')[0];
+    if(navButtonNext !== undefined && this._options.maxYear !== 0 && this._year >= this._options.maxYear){
+        navButtonNext.setAttribute('disabled','');
+    } else if (navButtonNext) {
+        navButtonNext.removeAttribute('disabled');
     }
 };
 
