@@ -60,10 +60,10 @@ jsCalendarYearMonth.prototype._parseOptions = function(options) {
     var parsedOptions = Object.assign({}, defaultOptions, options);
 
     // Validar que monthsPerRow sea un número entero en el rango de 1 a 12
-    if (typeof parsedOptions.monthsPerRow !== 'number' || 
+    if (!parsedOptions.responsiveLayout && (typeof parsedOptions.monthsPerRow !== 'number' || 
         parsedOptions.monthsPerRow < 1 || 
         parsedOptions.monthsPerRow > 12 || 
-        !Number.isInteger(parsedOptions.monthsPerRow)) {
+        !Number.isInteger(parsedOptions.monthsPerRow)) ) {
         console.warn(`Valor inválido para monthsPerRow (${parsedOptions.monthsPerRow}). Se usará el valor predeterminado de ${defaultOptions.monthsPerRow}.`);
         parsedOptions.monthsPerRow = defaultOptions.monthsPerRow;
     }
@@ -76,13 +76,20 @@ jsCalendarYearMonth.prototype._render = function() {
     if( this._options.responsiveLayout ) {
         this._renderResponsive();
     } else {
+        // Obtener el ancho mínimo para el calendario basado en el tema
+        // var minWidth = this._getMinWidthForCalendar();
+        this._minwidthmoth = 0;
+
         this._renderColsRow();
 
         var mpr = this._options.monthsPerRow;
+        var mwpr = this._minwidthmoth;
         var rowContainers = document.querySelectorAll('.year-row-container');
         rowContainers.forEach(function(rowContainer) {
             console.log(mpr);
+            console.log(mwpr);
             rowContainer.style.setProperty('--months-per-row', mpr);
+            rowContainer.style.setProperty('--min-width-month', mwpr);
         });
     }
 };
@@ -147,6 +154,10 @@ jsCalendarYearMonth.prototype._renderColsRow = function() {
         this._applyExtensions(calendar);
         this._selectDatesForMonth(calendar, i + 1);
         this._calendars.push(calendar);
+
+        if( i === 0){
+            this._minwidthmoth = calendar._elements.table.offsetWidth;
+        }
     }
 };
 
@@ -205,6 +216,50 @@ jsCalendarYearMonth.prototype._renderResponsive = function() {
         this._selectDatesForMonth(calendar, i + 1);
         this._calendars.push(calendar);
     }
+};
+
+jsCalendarYearMonth.prototype._getMinWidthForCalendar = function() {
+    // Crear un contenedor temporal
+    var tempContainer = document.createElement('div');
+    tempContainer.style.position = 'absolute';
+    tempContainer.style.visibility = 'hidden';
+    tempContainer.style.width = 'auto';
+    tempContainer.style.height = 'auto';
+    tempContainer.style.pointerEvents = 'none';
+
+    // Crear un sub-componente jsCalendar temporal
+    var tempCalendarContainer = document.createElement('div');
+    tempCalendarContainer.className = "year-row-container";
+    tempContainer.appendChild(tempCalendarContainer);
+
+    var monthContainer = document.createElement("div");
+    monthContainer.className = "month-container";
+    tempCalendarContainer.appendChild(monthContainer);
+
+    // Añadir las clases de tema
+    this._options.themeClasses.forEach(function(themeClass) {
+        monthContainer.classList.add(themeClass);
+    });
+
+    // Añadir al DOM
+    document.body.appendChild(tempContainer);
+
+    // Crear el calendario temporal
+    var tempCalendar = jsCalendar.new(monthContainer, 0, {
+        language: this._options.language,
+        zeroFill: this._options.zeroFill,
+        monthFormat: this._options.monthFormat,
+        dayFormat: this._options.dayFormat,
+        navigator: false,
+    });
+
+    // Medir el ancho mínimo necesario
+    var minWidth = tempCalendarContainer.offsetWidth;
+
+    // Eliminar el calendario temporal
+    document.body.removeChild(tempContainer);
+
+    return minWidth;
 };
 
 // Método _renderHeader
