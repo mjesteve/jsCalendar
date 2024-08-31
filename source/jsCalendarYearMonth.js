@@ -98,36 +98,31 @@ jsCalendarYearMonth.prototype._parseOptions = function(options) {
 
 // Método _render
 jsCalendarYearMonth.prototype._render = function() {
-    if( this._options.responsiveLayout ) {
-        this._renderResponsive();
-    } else {
-        this._minwidthmoth = 0;
-        this._renderColsRow();
-
-        var mpr = this._options.monthsPerRow;
-        var mwpr = this._minwidthmoth;
-        var rowContainers = this._container.querySelectorAll('.year-row-container');
-        rowContainers.forEach(function(rowContainer) {
-            rowContainer.style.setProperty('--months-per-row', mpr);
-            rowContainer.style.setProperty('--min-width-month', mwpr);
-        });
-    }
-
-    this._updateButtonsNavYear();    
-};
-
-// Método _render no responsive. cols per row.
-jsCalendarYearMonth.prototype._renderColsRow = function() {
     var wrapper = this._container;
 
     // Renderizar la cabecera
     var header = this._renderHeader(this._options.onPrevYear ? this._options.onPrevYear.bind(this) : this._prevYear.bind(this),
     this._options.onNextYear ? this._options.onNextYear.bind(this) : this._nextYear.bind(this));
     wrapper.appendChild(header);
+    
+    // Renderizar el anuario
+    if( this._options.responsiveLayout ) {
+        this._renderBodyResponsive();
+    } else {
+        this._renderBodyColsRow();
+    }
 
+    this._updateButtonsNavYear();    
+};
+
+// Método _render no responsive. cols per row.
+jsCalendarYearMonth.prototype._renderBodyColsRow = function() {
+    var wrapper = this._container;
     var rowContainer = document.createElement("div");
     rowContainer.className = "year-row-container";
     wrapper.appendChild(rowContainer);    
+
+    this._minwidthmoth = 0;
 
     for (var i = 0; i < 12; i++) {
         if (i % this._options.monthsPerRow === 0 && i !== 0) {
@@ -140,102 +135,32 @@ jsCalendarYearMonth.prototype._renderColsRow = function() {
         monthContainer.className = "month-container";
         rowContainer.appendChild(monthContainer);
 
-        this._options.themeClasses.forEach(function(themeClass) {
-            monthContainer.classList.add(themeClass);
-        });
-
-        var calendar = jsCalendar.new(monthContainer, 0, {
-            language: this._options.language,
-            zeroFill: this._options.zeroFill,
-            monthFormat: this._options.monthFormat,
-            dayFormat: this._options.dayFormat,
-            firstDayOfTheWeek: !this._options.firstDayOfTheWeek ? undefined : this._options.firstDayOfTheWeek,
-            navigator: false,
-            onMonthRender: this._options.onMonthRender,
-            onDayRender: this._options.onDayRender,
-            onDateRender: this._options.onDateRender,
-        });
-        calendar.goto(new Date(this._year, i, 1));
-
-        // Add target listeners
-        var parent = this;
-        // Calendar click handler
-        calendar.onDateClick(function(event, date) {
-            if (typeof parent._options.onDateClick === 'function') {
-                parent._options.onDateClick(event, date);
-            }
-
-            // Dispatchar el evento onDateClick
-            var event = new CustomEvent('onDateClick', {
-                detail: { event: event, date: date }
-            });
-            wrapper.dispatchEvent(event);
-        });
-
-        this._applyExtensions(calendar);
-        this._selectDatesForMonth(calendar, i + 1);
+        var calendar = this._renderMonth(wrapper, monthContainer, i);
         this._calendars.push(calendar);
 
         if( i === 0){
             this._minwidthmoth = calendar._elements.table.offsetWidth;
         }
     }
+
+    var mpr = this._options.monthsPerRow;
+    var mwpr = this._minwidthmoth;
+    var rowContainers = wrapper.querySelectorAll('.year-row-container');
+    rowContainers.forEach(function(rowContainer) {
+        rowContainer.style.setProperty('--months-per-row', mpr);
+        rowContainer.style.setProperty('--min-width-month', mwpr);
+    });
 };
 
 // Método _render responsive
-jsCalendarYearMonth.prototype._renderResponsive = function() {
+jsCalendarYearMonth.prototype._renderBodyResponsive = function() {
     var wrapper = this._container;
-
-    // Vincular el contexto correcto (this) a las funciones de navegación
-    /* var onPrevYear = this._options.onPrevYear ? this._options.onPrevYear.bind(this) : this._prevYear.bind(this);
-    var onNextYear = this._options.onNextYear ? this._options.onNextYear.bind(this) : this._nextYear.bind(this); */
-
-    // Renderizar la cabecera
-    var header = this._renderHeader(this._options.onPrevYear ? this._options.onPrevYear.bind(this) : this._prevYear.bind(this),
-    this._options.onNextYear ? this._options.onNextYear.bind(this) : this._nextYear.bind(this));
-    wrapper.appendChild(header);
-
     // Crear calendarios mensuales
     for (var i = 0; i < 12; i++) {
         var monthContainer = document.createElement("div");
-        // Aplicar las clases de tema especificadas
-        this._options.themeClasses.forEach(function (themeClass) {
-            monthContainer.classList.add(themeClass);
-        });
         wrapper.appendChild(monthContainer);
-        
-        var calendar = jsCalendar.new(monthContainer, 0, {
-            language: this._options.language,
-            zeroFill: this._options.zeroFill,
-            monthFormat: this._options.monthFormat,
-            dayFormat: this._options.dayFormat,
-            firstDayOfTheWeek: !this._options.firstDayOfTheWeek ? undefined : this._options.firstDayOfTheWeek,
-            navigator: false,
-            min: this._options.min,
-            max: this._options.max,
-            onMonthRender: this._options.onMonthRender,
-            onDayRender: this._options.onDayRender,
-            onDateRender: this._options.onDateRender,
-        });
-        calendar.goto(new Date(this._year, i, 1));
 
-        // Add target listeners
-        var parent = this;
-        // Calendar click handler
-        calendar.onDateClick(function(event, date) {
-            if (typeof parent._options.onDateClick === 'function') {
-                parent._options.onDateClick(event, date);
-            }
-
-            // Dispatchar el evento onDateClick
-            var event = new CustomEvent('onDateClick', {
-                detail: { event: event, date: date }
-            });
-            wrapper.dispatchEvent(event);
-        });
-
-        this._applyExtensions(calendar);
-        this._selectDatesForMonth(calendar, i + 1);
+        var calendar = this._renderMonth(wrapper, monthContainer, i);
         this._calendars.push(calendar);
     }
 };
@@ -322,6 +247,45 @@ jsCalendarYearMonth.prototype._renderHeader = function(onPrevYear, onNextYear) {
     }
 
     return header;
+};
+// Método _renderMonth
+jsCalendarYearMonth.prototype._renderMonth = function(wrapper, monthContainer, month) {
+    // Aplicar las clases de tema especificadas
+    this._options.themeClasses.forEach(function(themeClass) {
+        monthContainer.classList.add(themeClass);
+    });
+
+    var calendar = jsCalendar.new(monthContainer, 0, {
+        language: this._options.language,
+        zeroFill: this._options.zeroFill,
+        monthFormat: this._options.monthFormat,
+        dayFormat: this._options.dayFormat,
+        firstDayOfTheWeek: !this._options.firstDayOfTheWeek ? undefined : this._options.firstDayOfTheWeek,
+        navigator: false,
+        onMonthRender: this._options.onMonthRender,
+        onDayRender: this._options.onDayRender,
+        onDateRender: this._options.onDateRender,
+    });
+    calendar.goto(new Date(this._year, month, 1));
+
+    // Add target listeners
+    var parent = this;
+    // Calendar click handler
+    calendar.onDateClick(function(event, date) {
+        if (typeof parent._options.onDateClick === 'function') {
+            parent._options.onDateClick(event, date);
+        }
+        // Dispatchar el evento onDateClick
+        var event = new CustomEvent('onDateClick', {
+            detail: { event: event, date: date }
+        });
+        wrapper.dispatchEvent(event);
+    });
+
+    this._applyExtensions(calendar);
+    this._selectDatesForMonth(calendar, month + 1);
+
+    return calendar;
 };
 
 // Método updateYear
