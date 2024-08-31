@@ -104,6 +104,8 @@ jsCalendarYearMonth.prototype._render = function() {
     var header = this._renderHeader(this._options.onPrevYear ? this._options.onPrevYear.bind(this) : this._prevYear.bind(this),
     this._options.onNextYear ? this._options.onNextYear.bind(this) : this._nextYear.bind(this));
     wrapper.appendChild(header);
+
+    this._updateButtonsNavYear();    
     
     // Renderizar el anuario
     if( this._options.responsiveLayout ) {
@@ -111,8 +113,6 @@ jsCalendarYearMonth.prototype._render = function() {
     } else {
         this._renderBodyColsRow();
     }
-
-    this._updateButtonsNavYear();    
 };
 
 // Método _render no responsive. cols per row.
