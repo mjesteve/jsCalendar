@@ -102,15 +102,12 @@ jsCalendarYearMonth.prototype._render = function() {
         this._renderResponsive();
     } else {
         this._minwidthmoth = 0;
-
         this._renderColsRow();
 
         var mpr = this._options.monthsPerRow;
         var mwpr = this._minwidthmoth;
         var rowContainers = this._container.querySelectorAll('.year-row-container');
         rowContainers.forEach(function(rowContainer) {
-            console.log(mpr);
-            console.log(mwpr);
             rowContainer.style.setProperty('--months-per-row', mpr);
             rowContainer.style.setProperty('--min-width-month', mwpr);
         });
@@ -124,7 +121,8 @@ jsCalendarYearMonth.prototype._renderColsRow = function() {
     var wrapper = this._container;
 
     // Renderizar la cabecera
-    var header = this._renderHeader(this._prevYear.bind(this), this._nextYear.bind(this));
+    var header = this._renderHeader(this._options.onPrevYear ? this._options.onPrevYear.bind(this) : this._prevYear.bind(this),
+    this._options.onNextYear ? this._options.onNextYear.bind(this) : this._nextYear.bind(this));
     wrapper.appendChild(header);
 
     var rowContainer = document.createElement("div");
@@ -189,11 +187,12 @@ jsCalendarYearMonth.prototype._renderResponsive = function() {
     var wrapper = this._container;
 
     // Vincular el contexto correcto (this) a las funciones de navegación
-    var onPrevYear = this._options.onPrevYear ? this._options.onPrevYear.bind(this) : this._prevYear.bind(this);
-    var onNextYear = this._options.onNextYear ? this._options.onNextYear.bind(this) : this._nextYear.bind(this);
+    /* var onPrevYear = this._options.onPrevYear ? this._options.onPrevYear.bind(this) : this._prevYear.bind(this);
+    var onNextYear = this._options.onNextYear ? this._options.onNextYear.bind(this) : this._nextYear.bind(this); */
 
     // Renderizar la cabecera
-    var header = this._renderHeader(onPrevYear, onNextYear);
+    var header = this._renderHeader(this._options.onPrevYear ? this._options.onPrevYear.bind(this) : this._prevYear.bind(this),
+    this._options.onNextYear ? this._options.onNextYear.bind(this) : this._nextYear.bind(this));
     wrapper.appendChild(header);
 
     // Crear calendarios mensuales

@@ -60,6 +60,9 @@
             }
         });
 
+        // Simular un cambio de año
+        yearCalendar.updateYear(2030);
+
         var yearCalendar1 = new jsCalendarYearMonth(document.getElementById('year-calendar1'), {
             themeClasses: ['classic-theme', 'micro-theme', "red"],
             yearNavigator: true, // Mostrar el navegador de años
@@ -68,11 +71,14 @@
             fontawesomePrefix: 'fas', //ver. 6
             responsiveLayout: false,
             monthsPerRow: 4,
-            minYear: 2024, maxYear: 2024,
+            minYear: 2020, maxYear: 2025,
+            onPrevYear: function() {
+                this.updateYear(this._year - 1);
+            },
+            onNextYear: function() {
+                this.updateYear(this._year + 1);
+            }
         });
-
-// Simular un cambio de año
-yearCalendar1.updateYear(2030);
 
         var yearCalendar2 = new jsCalendarYearMonth(document.getElementById('year-calendar2'), {
             themeClasses: ['material-theme', 'micro-theme', "red"],
@@ -80,6 +86,7 @@ yearCalendar1.updateYear(2030);
             yearNavigator: true, // Mostrar el navegador de años
             yearNavigatorPosition: 'left',
             navIcons: 'material', // You need to include both the Material Design css file
+            minYear: 2024, maxYear: 2024,
         });
 
         var yearCalendar3 = new jsCalendarYearMonth(document.getElementById('year-calendar3'), { 
