@@ -61,7 +61,7 @@
             navIcons: 'fontawesome', // You need to include both the font-awesome css file
             fontawesomePrefix: 'fa', //ver. 4.7
             yearNavigatorPosition: 'left',
-            extensions: ['custom-date-attribute','custom-weekend-attribute'], // Aplicar la extensión personalizada
+            extensions: ['custom-date-attribute','custom-weekend-today'], // Aplicar la extensión personalizada
             selectedDates: [
                 "2024-01-15",
                 "2024-02-22",
@@ -104,7 +104,7 @@
             yearNavigator: true, // Mostrar el navegador de años
             yearNavigatorPosition: 'right',
             navIcons: 'material', // You need to include both the Material Design css file
-            extensions: ['custom-date-attribute','custom-weekend-attribute'], // Aplicar la extensión personalizada, 
+            extensions: ['custom-date-attribute','custom-weekend-today'], // Aplicar la extensión personalizada, 
             selectedDates: ['2024-01-15', '2024-01-22'],
             onYearChanged: function(newYear, oldYear) {
                 console.log("El año ha cambiado a:", newYear, oldYear);

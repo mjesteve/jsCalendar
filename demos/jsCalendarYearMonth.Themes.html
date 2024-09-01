@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0">
+    <title>Year Month Calendar Component</title>
+    
+    <!-- Cargar los estilos de jsCalendar -->
+    <link rel="stylesheet" type="text/css" href="../source/jsCalendar.css">
+    <link rel="stylesheet" type="text/css" href="../themes/jsCalendar.clean.css">
+    <link rel="stylesheet" type="text/css" href="../themes/jsCalendar.medium.css">
+    <link rel="stylesheet" type="text/css" href="../themes/jsCalendar.micro.css">
+    <link rel="stylesheet" type="text/css" href="../themes/jsCalendar.darkseries.css">
+    
+    <!-- Cargar el nuevo CSS para el componente jsCalendarYearMonth -->
+    <link rel="stylesheet" type="text/css" href="../source/jsCalendarYearMonth.css">
+
+    <!-- Google Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300&display=swap">
+<!--  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <!-- Cargar los scripts de jsCalendar -->
+    <script type="text/javascript" src="../source/jsCalendar.js"></script>
+    <script type="text/javascript" src="../source/jsCalendar.lang.es.js"></script>
+    <script type="text/javascript" src="../source/jsCalendar.lang.ca.js"></script>
+    <script type="text/javascript" src="../source/jsCalendar.lang.fr.js"></script>
+    <script type="text/javascript" src="../source/jsCalendarYearMonth.js"></script>
+    <!-- <script type="text/javascript" src="../source/jsCalendarYearMonth_NoIIFE_prototype_Object.js"></script> -->
+
+    <!-- Demo Style -->
+    <style>
+        html, body {
+            font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+        }
+    </style>
+</head>
+<body style="width: 2500px;">
+
+    <!-- Blue theme -->
+    <div class="auto-jsCalendar clean-theme red" data-date="01-09-2024"></div>
+    
+    <div id="year-calendar"></div>
+    <div id="year-calendar1"></div>
+    <div id="year-calendar2"></div>
+    <div id="year-calendar3"></div>
+
+    <script type="text/javascript">
+        // Instanciar el componente jsCalendarYearMonth
+        var calendarElement = document.getElementById('year-calendar');
+        // Crear el calendario anual
+        var yearCalendar = new jsCalendarYearMonth(calendarElement, {
+            themeClasses: ["red"], 
+            yearNavigator: true, // Mostrar el navegador de años
+            yearNavigatorPosition: 'left',
+            navIcons: 'fontawesome', // You need to include both the font-awesome css file
+            fontawesomePrefix: 'fa', //ver. 4.7
+            selectedDates: ['2024-01-15', '2024-01-22'],
+            customYearTitle: function(year) {
+                return "Año: " + year + ' (Default Theme, Icon-Button-Nav FontAwesome 4.7)';  // Ejemplo de personalización
+            },
+            minYear: 2020, maxYear: 2025,
+        });
+/* 
+        var yearCalendar1 = new jsCalendarYearMonth(document.getElementById('year-calendar1'), {
+            themeClasses: ['classic-theme', "red"],
+            yearNavigator: true, // Mostrar el navegador de años
+            yearNavigatorPosition: 'left',
+            navIcons: 'fontawesome', // You need to include both the font-awesome css file
+            fontawesomePrefix: 'fas', //ver. 6
+            selectedDates: ['2024-01-15', '2024-01-22'],
+            responsiveLayout: false,
+            monthsPerRow: 12,
+            customYearTitle: function(year) {
+                return "Año: " + year + ' (Classic Theme, Icon-Button-Nav FontAwesome 6, No responsive)';  // Ejemplo de personalización
+            },
+        });
+
+        var yearCalendar2 = new jsCalendarYearMonth(document.getElementById('year-calendar2'), {
+            themeClasses: ['material-theme', "red"],
+            language: 'es',
+            yearNavigator: true, // Mostrar el navegador de años
+            yearNavigatorPosition: 'left',
+            navIcons: 'material', // You need to include both the Material Design css file
+            selectedDates: ['2024-01-15', '2024-01-22'],
+            customYearTitle: function(year) {
+                return "Año: " + year + ' (Material Theme, Icon-Button-Nav Material)';  // Ejemplo de personalización
+            },
+        });
+
+        var yearCalendar3 = new jsCalendarYearMonth(document.getElementById('year-calendar3'), { 
+            yearNavigatorPosition: 'left', 
+            themeClasses: ['clean-theme', "red"],
+            language: 'es',
+            selectedDates: ['2024-01-15', '2024-01-22'],
+            customYearTitle: function(year) {
+                return "Año: " + year + ' (Clean Theme, Text-Button-Nav)';  // Ejemplo de personalización
+            }, 
+        }); */
+    </script>
+</body>
+</html>

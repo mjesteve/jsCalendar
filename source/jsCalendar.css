@@ -173,7 +173,7 @@
 			background: #FDE74C;
 		}
 		.jsCalendar.yellow tbody td.jsCalendar-selected{
-			background-color: #e2d474;
+			border-color: #FFE31B;
 		}
 	/* Orange */
 		.jsCalendar.orange tbody td.jsCalendar-current,
@@ -187,7 +187,7 @@
 			background: #FFB400;
 		}
 		.jsCalendar.orange tbody td.jsCalendar-selected{
-			background-color: #d8ae6e;
+			border-color: #FFB400;
 		}
 	/* Red */
 		.jsCalendar.red tbody td.jsCalendar-current {
@@ -204,7 +204,7 @@
 			background: #F6511D;
 		}
 		.jsCalendar.red tbody td.jsCalendar-selected{
-			background-color: #c07a64;
+			border-color: #F6511D;
 		}
 	/* Green */
 		.jsCalendar.green tbody td.jsCalendar-current,
@@ -218,7 +218,7 @@
 			background: #7FB800;
 		}
 		.jsCalendar.green tbody td.jsCalendar-selected{
-			background-color: #92ad58;
+			border-color: #7FB800;
 		}
 
 

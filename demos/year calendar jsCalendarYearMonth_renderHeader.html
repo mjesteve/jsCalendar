@@ -53,7 +53,7 @@
             language: 'fr',
             firstDayOfTheWeek: 2,
             yearNavigator: true, // Mostrar el navegador de años
-            extensions: ['custom-date-attribute','custom-weekend-attribute'], // Aplicar la extensión personalizada
+            extensions: ['custom-date-attribute','custom-weekend-today'], // Aplicar la extensión personalizada
             /* renderHeader: function(year) {
                 // Crear un elemento de cabecera personalizado
                 var customHeader = document.createElement('div');
@@ -149,7 +149,7 @@
             //theme: 'classic', // Cambia el tema según lo desees
             language: 'es',
             yearNavigator: true, // Mostrar el navegador de años
-            extensions: ['custom-date-attribute','custom-weekend-attribute'], // Aplicar la extensión personalizada, 
+            extensions: ['custom-date-attribute','custom-weekend-today'], // Aplicar la extensión personalizada, 
             selectedDates: ['2024-01-15', '2024-01-22'],
             onYearChanged: function(newYear, oldYear) {
                 console.log("El año ha cambiado a:", newYear, oldYear);

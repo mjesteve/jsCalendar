@@ -420,13 +420,21 @@ jsCalendar.ext('custom-date-attribute', {
     }
 });
 
-// Añadir la extensión 'custom-weekend-attribute'
-jsCalendar.ext('custom-weekend-attribute', {
+// Añadir la extensión 'custom-weekend-today'
+// Resalta los sábados, domingos y el día de hoy.
+jsCalendar.ext('custom-weekend-today', {
     update: function(instance, month) {
+        var today = new Date();
         for (var i = month.days.length - 1; i >= 0; i--) {
             var dayElement = instance._elements.bodyCols[i];
             if (month.days[i].getDay() === 0 || month.days[i].getDay() === 6) {
                 dayElement.classList.add('jsCalendar-weekend-days');
+            }
+            if (today!=null && month.days[i].getFullYear() === today.getFullYear() && 
+            month.days[i].getMonth() === today.getMonth() &&
+            month.days[i].getDate() === today.getDate()) {
+                dayElement.classList.add('jsCalendar-today');
+                today = null;
             }
         }
     }

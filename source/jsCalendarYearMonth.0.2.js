@@ -171,8 +171,8 @@
         }
     });
 
-    // Añadir la extensión 'custom-weekend-attribute'
-    jsCalendar.ext('custom-weekend-attribute', {
+    // Añadir la extensión 'custom-weekend-today'
+    jsCalendar.ext('custom-weekend-today', {
         update: function(instance, month) {
             for (var i = month.days.length - 1; i >= 0; i--) {
                 // Cambia el estilo de las celdas del fin de semana
