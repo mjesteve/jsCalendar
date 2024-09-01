@@ -1,7 +1,7 @@
 /*
- * jsCalendar language extension
+ * jsCalendar language extension v1.4.6-beta
  * Add Spanish Language support
- * Translator: Grammatopoulos Athanasios-Vasileios (gramthanos@github)
+ * Translator: Grammatopoulos Athanasios-Vasileios (gramthanos@github), M.José Esteve (mjesteve@github)
  */
 
 // We love anonymous functions
@@ -53,7 +53,33 @@
             'Jueves',
             'Viernes',
             'Sábado'
-        ]
+        ],
+        // Short days of the week
+        weekdaysShort : [
+            // EDIT HERE THE DAYS ~~~~~~~~~~~~~~~
+            'Do',
+            'Lu',
+            'Ma',
+            'Mi',
+            'Ju',
+            'Vi',
+            'Sa'
+            // STOP EDIT ~~~~~~~~~~~~~~~~~~~~~~~~
+        ],
+        // Min-Short days of the week
+        weekdaysMin : [
+            // EDIT HERE THE DAYS ~~~~~~~~~~~~~~~
+            'D',
+            'L',
+            'M',
+            'X',
+            'J',
+            'V',
+            'S'
+            // STOP EDIT ~~~~~~~~~~~~~~~~~~~~~~~~
+        ],
+        // First Day Week
+        firstDayOfTheWeek : 2,
     });
 
 })();
