@@ -1,7 +1,7 @@
 /*
- * jsCalendar language extension
+ * jsCalendar language extension v1.4.6-beta
  * Add Catalan Language support
- * Translators: Anton Stasyuk (antonstsk@github), Quentin PAGÈS (ensag-dev@github)
+ * Translators: Anton Stasyuk (antonstsk@github), Quentin PAGÈS (ensag-dev@github), M.José Esteve (mjesteve@github)
  */
 
 // We love anonymous functions
@@ -53,7 +53,33 @@
             'Dijous',
             'Divendres',
             'Dissabte'
-        ]
+        ],
+        // Short days of the week
+        weekdaysShort : [
+            // EDIT HERE THE DAYS ~~~~~~~~~~~~~~~
+            'Dg',
+            'Dl',
+            'Dt',
+            'Dc',
+            'Dj',
+            'Dv',
+            'Ds'
+            // STOP EDIT ~~~~~~~~~~~~~~~~~~~~~~~~
+        ],
+        // Min-Short days of the week
+        weekdaysMin : [
+            // EDIT HERE THE DAYS ~~~~~~~~~~~~~~~
+            'Dg',
+            'Dl',
+            'Dt',
+            'Dc',
+            'Dj',
+            'Dv',
+            'Ds'
+            // STOP EDIT ~~~~~~~~~~~~~~~~~~~~~~~~
+        ],
+        // First Day Week
+        firstDayOfTheWeek : 2,
     });
 
 })();

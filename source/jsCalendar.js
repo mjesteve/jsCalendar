@@ -80,6 +80,11 @@ var jsCalendar = (function(){
             months : ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
             // Days Names
             days : ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+            // Init (Hiedra)
+            weekdaysShort : undefined,
+            weekdaysMin : undefined,
+            firstDayOfTheWeek : 1,
+            // End (Hiedra)
             // Default handlers
             _dateStringParser : function(key, date) {return JsCalendar._defaultDateStringParser(key, date, this);},
             _dayStringParser : function(key, date) {return JsCalendar._defaultDayStringParser(key, date, this);}
@@ -278,7 +283,11 @@ var jsCalendar = (function(){
         // Set language
         this.setLanguage(this._options.language);
 
-        // Set first day of the week
+        // Set first day of the week (Hiedra)
+        if(typeof this.language.firstDayOfTheWeek !== 'undefined' && typeof options.fdotw === 'undefined' && typeof options.firstDayOfTheWeek === 'undefined'){
+            options.firstDayOfTheWeek = this.language.firstDayOfTheWeek;
+        } 
+
         if (typeof options.fdotw !== 'undefined'){
             options.firstDayOfTheWeek = options.fdotw;
         }
@@ -1243,6 +1252,11 @@ var jsCalendar = (function(){
         this.language.days = language.days;
         this.language.dateStringParser = language._dateStringParser;
         this.language.dayStringParser = language._dayStringParser;
+        // Init - (Hiedra)
+        this.language.firstDayOfTheWeek = language.firstDayOfTheWeek;
+        this.language.weekdaysShort = language.weekdaysShort;
+        this.language.weekdaysMin = language.weekdaysMin;
+        // End - (Hiedra)
 
         // Refresh calendar
         this.refresh();
@@ -1342,7 +1356,10 @@ var jsCalendar = (function(){
                 months : languages[lang].months,
                 days : languages[lang].days,
                 dateStringParser : languages[lang]._dateStringParser,
-                dayStringParser : languages[lang]._dayStringParser
+                dayStringParser : languages[lang]._dayStringParser,
+                firstDayOfTheWeek : languages[lang].firstDayOfTheWeek,
+                weekdaysShort : languages[lang].weekdaysShort,
+                weekdaysMin : languages[lang].weekdaysMin
             }},
             [date, format]
         );
@@ -1489,9 +1506,17 @@ var jsCalendar = (function(){
             case 'ddd':
                 return lang.days[date.getDay()].substring(0, 3);
             case 'dd':
-                return lang.days[date.getDay()].substring(0, 2);
+                if(lang.hasOwnProperty('weekdaysShort') && typeof lang.weekdaysShort !== 'undefined') {
+                    return lang.weekdaysShort[date.getDay()];
+                } else {
+                    return lang.days[date.getDay()].substring(0, 2);
+                }
             case 'd':
-                return lang.days[date.getDay()].substring(0, 1);
+                if(lang.hasOwnProperty('weekdaysMin') && typeof lang.weekdaysMin !== 'undefined') {
+                    return lang.weekdaysMin[date.getDay()];
+                } else {
+                    return lang.days[date.getDay()].substring(0, 1);
+                }
             case 'DD':
                 return (date.getDate() <= 9 ? '0' : '') + date.getDate();
             case 'D':
@@ -1513,9 +1538,17 @@ var jsCalendar = (function(){
                 return lang.days[day].substring(0, 3);
             case 'DD':
             case 'dd':
-                return lang.days[day].substring(0, 2);
+                if(lang.hasOwnProperty('weekdaysShort') && typeof lang.weekdaysShort !== 'undefined') {
+                    return lang.weekdaysShort[day];
+                } else {
+                    return lang.days[day].substring(0, 2);
+                }
             case 'D':
-                return lang.days[day].substring(0, 1);
+                if(lang.hasOwnProperty('weekdaysMin') && typeof lang.weekdaysMin !== 'undefined') {
+                    return lang.weekdaysMin[day];
+                } else {
+                    return lang.days[day].substring(0, 1);
+                }
         }
     };
 
