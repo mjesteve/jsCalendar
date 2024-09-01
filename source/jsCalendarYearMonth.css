@@ -109,28 +109,33 @@
 }
 
 /* Nuevos estilos para el fin de semana y para hoy */
-.jsCalendar-yearmonth .jsCalendar tbody td.jsCalendar-weekend-days, 
-.jsCalendar-yearmonth .jsCalendar.material-theme tbody td.jsCalendar-weekend-days, 
-.jsCalendar-yearmonth .jsCalendar.classic-theme tbody td.jsCalendar-weekend-days, 
-.jsCalendar-yearmonth .jsCalendar.clean-theme tbody td.jsCalendar-weekend-days, 
-.jsCalendar-yearmonth .jsCalendar.black-theme tbody td.jsCalendar-weekend-days, 
-.jsCalendar-yearmonth .jsCalendar.grey-theme tbody td.jsCalendar-weekend-days, 
-.jsCalendar-yearmonth .jsCalendar.white-theme tbody td.jsCalendar-weekend-days {
+.jsCalendar tbody td.jsCalendar-weekend-days, 
+.jsCalendar.material-theme tbody td.jsCalendar-weekend-days, 
+.jsCalendar.classic-theme tbody td.jsCalendar-weekend-days, 
+.jsCalendar.clean-theme tbody td.jsCalendar-weekend-days, 
+.jsCalendar.black-theme tbody td.jsCalendar-weekend-days, 
+.jsCalendar.grey-theme tbody td.jsCalendar-weekend-days, 
+.jsCalendar.white-theme tbody td.jsCalendar-weekend-days {
     font-weight: bold;
 }
 
-.jsCalendar-yearmonth .jsCalendar tbody td.jsCalendar-today, 
-.jsCalendar-yearmonth .jsCalendar.material-theme tbody td.jsCalendar-today, 
-.jsCalendar-yearmonth .jsCalendar.classic-theme tbody td.jsCalendar-today, 
-.jsCalendar-yearmonth .jsCalendar.clean-theme tbody td.jsCalendar-today, 
-.jsCalendar-yearmonth .jsCalendar.black-theme tbody td.jsCalendar-today, 
-.jsCalendar-yearmonth .jsCalendar.grey-theme tbody td.jsCalendar-today, 
-.jsCalendar-yearmonth .jsCalendar.white-theme tbody td.jsCalendar-today {
+.jsCalendar tbody td.jsCalendar-today, 
+.jsCalendar.material-theme tbody td.jsCalendar-today, 
+.jsCalendar.classic-theme tbody td.jsCalendar-today, 
+.jsCalendar.clean-theme tbody td.jsCalendar-today, 
+.jsCalendar.black-theme tbody td.jsCalendar-today, 
+.jsCalendar.grey-theme tbody td.jsCalendar-today, 
+.jsCalendar.white-theme tbody td.jsCalendar-today {
     font-weight: bold;
+    /* text-decoration: underline; */
+    text-decoration: overline;
+    text-decoration-style: solid;
 }
 .jsCalendar tbody td.jsCalendar-current.jsCalendar-today {
-    font-weight: bold;
     color: inherit;
+    font-weight: bold;
+    text-decoration: overline;
+    text-decoration-style: solid;
 }
 .jsCalendar tbody td.jsCalendar-today {
     color: #03A9F4;
@@ -146,4 +151,23 @@
 }
 .jsCalendar.green tbody td.jsCalendar-today {
     color: #639000;
+}
+.jsCalendar tbody td.jsCalendar-today2::before {
+    /* content: "•";
+    content: "⁕";
+    content: "⁙";
+    content: "⊿";
+    content: "◤"; */
+    content: "◢";
+    position: relative;
+    bottom: -25%;
+    right: -36%;
+    font-size: xx-small;
+}
+.jsCalendar tbody td.jsCalendar-today2::after {
+    content: "◤";
+    position: relative;
+    bottom: -25%;
+    right: -36%;
+    font-size: xx-small;
 }
