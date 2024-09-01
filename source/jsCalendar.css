@@ -1,10 +1,10 @@
 /*
- * jsCalendar v1.4.5
+ * jsCalendar v1.4.6-beta
  * 
  * 
  * MIT License
  * 
- * Copyright (c) 2017-2023 Grammatopoulos Athanasios-Vasileios
+ * Copyright (c) 2017-2024 Grammatopoulos Athanasios-Vasileios
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -162,7 +162,8 @@
 			background: #83D8FF;
 		}
 	/* Yellow */
-		.jsCalendar.yellow tbody td.jsCalendar-current {
+		.jsCalendar.yellow tbody td.jsCalendar-current,
+		.jsCalendar.yellow tbody td.jsCalendar-current.jsCalendar-selected{
 			background-color: #FFE31B;
 		}
 		.jsCalendar.yellow ::-moz-selection {
@@ -171,8 +172,12 @@
 		.jsCalendar.yellow ::selection {
 			background: #FDE74C;
 		}
+		.jsCalendar.yellow tbody td.jsCalendar-selected{
+			border-color: #FFE31B;
+		}
 	/* Orange */
-		.jsCalendar.orange tbody td.jsCalendar-current {
+		.jsCalendar.orange tbody td.jsCalendar-current,
+		.jsCalendar.orange tbody td.jsCalendar-current.jsCalendar-selected {
 			background-color: #FFB400;
 		}
 		.jsCalendar.orange ::-moz-selection {
@@ -181,9 +186,16 @@
 		.jsCalendar.orange ::selection {
 			background: #FFB400;
 		}
+		.jsCalendar.orange tbody td.jsCalendar-selected{
+			border-color: #FFB400;
+		}
 	/* Red */
 		.jsCalendar.red tbody td.jsCalendar-current {
 			background-color: #F6511D;
+		}
+		.jsCalendar.red tbody td.jsCalendar-current.jsCalendar-selected {
+			background-color: #F6511D;
+			color: #FFFFFF;
 		}
 		.jsCalendar.red ::-moz-selection {
 			background: #F6511D;
@@ -191,8 +203,12 @@
 		.jsCalendar.red ::selection {
 			background: #F6511D;
 		}
+		.jsCalendar.red tbody td.jsCalendar-selected{
+			border-color: #F6511D;
+		}
 	/* Green */
-		.jsCalendar.green tbody td.jsCalendar-current {
+		.jsCalendar.green tbody td.jsCalendar-current,
+		.jsCalendar.green tbody td.jsCalendar-current.jsCalendar-selected {
 			background-color: #7FB800;
 		}
 		.jsCalendar.green ::-moz-selection {
@@ -200,6 +216,9 @@
 		}
 		.jsCalendar.green ::selection {
 			background: #7FB800;
+		}
+		.jsCalendar.green tbody td.jsCalendar-selected{
+			border-color: #7FB800;
 		}
 
 
@@ -248,35 +267,49 @@
 			text-shadow: none;
 		}
 	/* Yellow */
-		.jsCalendar.material-theme.yellow thead {
+		.jsCalendar.material-theme.yellow thead,
+		.jsCalendar.material-theme.yellow tbody td.jsCalendar-selected {
 			background-color: #FFE31B;
 		}
 		.jsCalendar.material-theme.yellow thead .jsCalendar-nav-left:hover,
-		.jsCalendar.material-theme.yellow thead .jsCalendar-nav-right:hover {
+		.jsCalendar.material-theme.yellow thead .jsCalendar-nav-right:hover,
+		.jsCalendar.material-theme.yellow tbody td.jsCalendar-current.jsCalendar-selected {
 			background-color: #E2CA23;
 		}
 	/* Orange */
-		.jsCalendar.material-theme.orange thead {
+		.jsCalendar.material-theme.orange thead,
+		.jsCalendar.material-theme.orange tbody td.jsCalendar-selected {
 			background-color: #FFB400;
 		}
 		.jsCalendar.material-theme.orange thead .jsCalendar-nav-left:hover,
-		.jsCalendar.material-theme.orange thead .jsCalendar-nav-right:hover {
+		.jsCalendar.material-theme.orange thead .jsCalendar-nav-right:hover,
+		.jsCalendar.material-theme.orange tbody td.jsCalendar-current.jsCalendar-selected {
 			background-color: #D49600;
 		}
 	/* Red */
 		.jsCalendar.material-theme.red thead {
 			background-color: #F6511D;
 		}
+		.jsCalendar.material-theme.red tbody td.jsCalendar-selected {
+			background-color: #F6511D;
+			color: #FFFFFF;
+		}
 		.jsCalendar.material-theme.red thead .jsCalendar-nav-left:hover,
 		.jsCalendar.material-theme.red thead .jsCalendar-nav-right:hover {
 			background-color: #BB3D16;
 		}
+		.jsCalendar.material-theme.red tbody td.jsCalendar-current.jsCalendar-selected {
+			background-color: #BB3D16;
+			color: #FFFFFF;
+		}
 	/* Green */
-		.jsCalendar.material-theme.green thead {
+		.jsCalendar.material-theme.green thead,
+		.jsCalendar.material-theme.green tbody td.jsCalendar-selected {
 			background-color: #7FB800;
 		}
 		.jsCalendar.material-theme.green thead .jsCalendar-nav-left:hover,
-		.jsCalendar.material-theme.green thead .jsCalendar-nav-right:hover {
+		.jsCalendar.material-theme.green thead .jsCalendar-nav-right:hover,
+		.jsCalendar.material-theme.green tbody td.jsCalendar-current.jsCalendar-selected {
 			background-color: #639000;
 		}
 
@@ -366,34 +399,48 @@
 			text-shadow: 0 0 3px #000000;
 		}
 	/* Yellow */
-		.jsCalendar.classic-theme.yellow thead {
+		.jsCalendar.classic-theme.yellow thead,
+		.jsCalendar.classic-theme.yellow tbody td.jsCalendar-selected {
 			background-color: #FFE31B;
 		}
 		.jsCalendar.classic-theme.yellow thead .jsCalendar-nav-left:hover,
-		.jsCalendar.classic-theme.yellow thead .jsCalendar-nav-right:hover {
-			background-color: #E2CA23;
+		.jsCalendar.classic-theme.yellow thead .jsCalendar-nav-right:hover,
+		.jsCalendar.classic-theme.yellow tbody td.jsCalendar-current.jsCalendar-selected{
+			background-color: #E2CA23; 
 		}
 	/* Orange */
-		.jsCalendar.classic-theme.orange thead {
+		.jsCalendar.classic-theme.orange thead,
+		.jsCalendar.classic-theme.orange tbody td.jsCalendar-selected {
 			background-color: #FFB400;
 		}
 		.jsCalendar.classic-theme.orange thead .jsCalendar-nav-left:hover,
-		.jsCalendar.classic-theme.orange thead .jsCalendar-nav-right:hover {
-			background-color: #D49600;
+		.jsCalendar.classic-theme.orange thead .jsCalendar-nav-right:hover,
+		.jsCalendar.classic-theme.orange tbody td.jsCalendar-current.jsCalendar-selected {
+			background-color: #D49600; 
 		}
 	/* Red */
 		.jsCalendar.classic-theme.red thead {
 			background-color: #F6511D;
 		}
+		.jsCalendar.classic-theme.red tbody td.jsCalendar-selected {
+			background-color: #F6511D;
+			color: #FFFFFF;
+		}
 		.jsCalendar.classic-theme.red thead .jsCalendar-nav-left:hover,
 		.jsCalendar.classic-theme.red thead .jsCalendar-nav-right:hover {
-			background-color: #BB3D16;
+			background-color: #BB3D16; 
+		}
+		.jsCalendar.classic-theme.red tbody td.jsCalendar-current.jsCalendar-selected {
+			background-color: #BB3D16; 
+			color: #FFFFFF;
 		}
 	/* Green */
-		.jsCalendar.classic-theme.green thead {
+		.jsCalendar.classic-theme.green thead,
+		.jsCalendar.classic-theme.green tbody td.jsCalendar-selected {
 			background-color: #7FB800;
 		}
 		.jsCalendar.classic-theme.green thead .jsCalendar-nav-left:hover,
-		.jsCalendar.classic-theme.green thead .jsCalendar-nav-right:hover {
-			background-color: #639000;
+		.jsCalendar.classic-theme.green thead .jsCalendar-nav-right:hover,
+		.jsCalendar.classic-theme.green tbody td.jsCalendar-current.jsCalendar-selected {
+			background-color: #639000; 
 		}
