@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0">
+    <title>Year Month Calendar Component</title>
+    
+    <!-- Cargar los estilos de jsCalendar -->
+    <link rel="stylesheet" type="text/css" href="../source/jsCalendar.css">
+    <link rel="stylesheet" type="text/css" href="../themes/jsCalendar.clean.css">
+    <link rel="stylesheet" type="text/css" href="../themes/jsCalendar.medium.css">
+    <link rel="stylesheet" type="text/css" href="../themes/jsCalendar.micro.css">
+    <link rel="stylesheet" type="text/css" href="../themes/jsCalendar.darkseries.css">
+    
+    <!-- Cargar el nuevo CSS para el componente jsCalendarYearMonth -->
+    <link rel="stylesheet" type="text/css" href="../source/jsCalendarYearMonth.0.1.4-beta.css">
+<!--  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <!-- Cargar los scripts de jsCalendar -->
+    <script type="text/javascript" src="../source/jsCalendar.js"></script>
+    <script type="text/javascript" src="../source/jsCalendar.lang.es.js"></script>
+    <script type="text/javascript" src="../source/jsCalendar.lang.ca.js"></script>
+    <script type="text/javascript" src="../source/jsCalendar.lang.fr.js"></script>
+    <script type="text/javascript" src="../source/jsCalendarYearMonth.0.1.4-beta.js"></script>
+    <!-- <script type="text/javascript" src="../source/jsCalendarYearMonth_NoIIFE_prototype_Object.js"></script> -->
+
+</head>
+<body>
+
+    <div id="year-calendar"></div>
+    
+    <div id="year-calendar1"></div>
+
+    <div id="year-calendar2"></div>
+
+    <div id="year-calendar3"></div>
+
+    <script type="text/javascript">
+        // Instanciar el componente jsCalendarYearMonth
+        /* var calendarElement = document.getElementById('year-calendar');
+        // Crear el calendario anual
+        var yearCalendar = new jsCalendarYearMonth(calendarElement, 0,{
+            themeClasses: ["red"], year: 2019,
+            yearNavigator: true, // Mostrar el navegador de años
+            yearNavigatorPosition: 'left',
+            navIcons: 'fontawesome', // You need to include both the font-awesome css file
+            fontawesomePrefix: 'fa', //ver. 4.7
+            selectedDates: ['2024-01-15', '2024-01-22', '03-02-2024'],
+            customYearTitle: function(year) {
+                return "Año: " + year + '<strong> (FontAwesome 4.7) </strong>';  // Ejemplo de personalización
+            },
+            minYear: 2020, maxYear: 2025,
+            onPrevYear: function() {
+                this.setYear(this._year - 1);
+            },
+            onNextYear: function() {
+                this.setYear(this._year + 1);
+            },
+            monthFormat: "month YYYY",
+        });
+
+        // Simular un cambio de año
+        yearCalendar.setYear(2030); */
+
+        var yearCalendar1 = new jsCalendarYearMonth(document.getElementById('year-calendar1'),0, {
+            themeClasses: ['classic-theme', 'micro-theme', "red"],
+            yearNavigator: true, // Mostrar el navegador de años
+            yearNavigatorPosition: 'left',
+            navIcons: 'fontawesome', // You need to include both the font-awesome css file
+            fontawesomePrefix: 'fas', //ver. 6
+            selectedDates: ['2024-01-15', '2024-01-22'],
+            responsiveLayout: false,
+            monthsPerRow: 4,
+            minYear: 2020, maxYear: 2025,
+            onPrevYear: function() {
+                this.setYear(this._year - 1);
+            },
+            onNextYear: function() {
+                this.setYear(this._year + 1);
+            }
+        });
+
+        yearCalendar1.selectDates(['2024-01-30']);
+        yearCalendar1.unselectDates(['2024-01-15', '2024-01-22', '2024-01-29']);
+
+// Simular un cambio de año
+//yearCalendar1.setYear(2020);
+
+        /* var yearCalendar2 = new jsCalendarYearMonth(document.getElementById('year-calendar2'), 0,{
+            themeClasses: ['material-theme', 'micro-theme', "red"],
+            language: 'es',
+            yearNavigator: true, // Mostrar el navegador de años
+            yearNavigatorPosition: 'left',
+            navIcons: 'material', // You need to include both the Material Design css file
+            minYear: 2024, maxYear: 2024,
+        });
+
+        var yearCalendar3 = new jsCalendarYearMonth(document.getElementById('year-calendar3'), 0,{ 
+            yearNavigatorPosition: 'left', 
+            themeClasses: ['clean-theme', 'micro-theme', "red"],language: 'es' }); */
+    </script>
+</body>
+</html>
