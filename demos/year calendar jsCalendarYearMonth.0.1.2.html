@@ -94,7 +94,7 @@
         });
 
         // Simular un cambio de año
-        yearCalendar.updateYear(2024); // Esto debería despachar el evento y desencadenar el listener
+        yearCalendar.setYear(2024); // Esto debería despachar el evento y desencadenar el listener
 
         var yearCalendar2 = new jsCalendarYearMonth(document.getElementById('year-calendar2'), {
             year: 2024,
@@ -122,7 +122,7 @@
 
         // Actualizar las fechas seleccionadas después de crear el componente
         setTimeout(function() {
-            yearCalendar2.updateSelectedDates(['2024-02-14', '2024-06-18', '2024-12-25']);
+            yearCalendar2.setSelectedDates(['2024-02-14', '2024-06-18', '2024-12-25']);
         }, 5000); // Actualiza las fechas después de 5 segundos
 
         var yearCalendar3 = new jsCalendarYearMonth(document.getElementById('year-calendar3'), { 

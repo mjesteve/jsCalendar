@@ -139,11 +139,11 @@
         },
 
         _prevYear: function() {
-            this.updateYear(this._year - 1);
+            this.setYear(this._year - 1);
         },
 
         _nextYear: function() {
-            this.updateYear(this._year + 1);
+            this.setYear(this._year + 1);
         },
 
         _applyExtensions: function (calendar) {
@@ -175,7 +175,7 @@
         },
 
         // Método para actualizar las fechas seleccionadas
-        updateSelectedDates: function(newSelectedDates) {
+        .setSelectedDates: function(newSelectedDates) {
             // Actualizar las fechas seleccionadas en las opciones
             this._options.selectedDates = newSelectedDates;
 

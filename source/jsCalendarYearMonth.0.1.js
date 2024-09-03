@@ -85,7 +85,7 @@
             prevButton.className = "year-prev";
             prevButton.textContent = "⟨"; // Símbolo de flecha hacia la izquierda
             prevButton.addEventListener("click", function() {
-                self.updateYear(self._year - 1);
+                self.setYear(self._year - 1);
             });
             navContainer.appendChild(prevButton);
 
@@ -94,7 +94,7 @@
             nextButton.className = "year-next";
             nextButton.textContent = "⟩"; // Símbolo de flecha hacia la derecha
             nextButton.addEventListener("click", function() {
-                self.updateYear(self._year + 1);
+                self.setYear(self._year + 1);
             });
             navContainer.appendChild(nextButton);
 

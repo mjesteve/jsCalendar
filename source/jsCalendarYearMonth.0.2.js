@@ -50,8 +50,8 @@
 
             // Pasar los métodos de navegación a renderHeader
             /* var header = this._renderHeader(
-                this._options.onPrevYear || (() => this.updateYear(this._year - 1)),
-                this._options.onNextYear || (() => this.updateYear(this._year + 1))
+                this._options.onPrevYear || (() => this.setYear(this._year - 1)),
+                this._options.onNextYear || (() => this.setYear(this._year + 1))
             ); */
 
             wrapper.appendChild(header);
@@ -131,12 +131,12 @@
 
         // Navegar al año anterior
         _prevYear: function() {
-            this.updateYear(this._year - 1);
+            this.setYear(this._year - 1);
         },
 
         // Navegar al año siguiente
         _nextYear: function() {
-            this.updateYear(this._year + 1);
+            this.setYear(this._year + 1);
         },
 
         // Aplicar extensiones
