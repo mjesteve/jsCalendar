@@ -42,7 +42,7 @@ var jsCalendarYearMonth = (function(){
     }
 
     // Version
-    JsCalendarYearMonth.version = 'v0.1.4-beta';
+    JsCalendarYearMonth.version = 'v0.1.4-beta.1';
 
     // Sub-Constructor
     JsCalendarYearMonth.prototype._construct = function(args) {
@@ -69,6 +69,46 @@ var jsCalendarYearMonth = (function(){
         // set not frozen
         this._isFrozen = false;
     }
+
+    // Método _applyExtensions
+    JsCalendarYearMonth.prototype._applyExtensions = function(calendar) {
+        if (this._options.extensions && this._options.extensions.length > 0) {
+            this._options.extensions.forEach(function(ext) {
+                if (typeof jsCalendar.ext === 'function') {
+                    var originalUpdate = calendar._events.update;
+                    calendar._events.update = function(month) {
+                        originalUpdate.call(calendar, month);
+                        jsCalendar.ext(ext).update(calendar, month);
+                    };
+                }
+            });
+        }
+    };
+
+    // Init calendar
+    JsCalendarYearMonth.prototype._init = function(options) {
+        // Init elements object
+        this._elements = {};
+        // Almacenar las instancias de los calendarios
+        this._calendars = [];
+        // Events init
+        this._events = {};
+/*         this._events.date = [];
+        this._events.month = []; */
+        this._events.header_render = [];
+        this._events.title_render = [];
+        /* this._events.date_render = [];
+        this._events.month_render = [];
+        this._events.month_render = []; */
+        // Dates variables
+        this._now = null;
+        this._year = null;
+        this._selectedDates = [];
+
+        // Parse options
+        this._parseOptions(options);
+        this._selectedDates = this._options.selectedDates;
+    };
 
     JsCalendarYearMonth.prototype._parseArguments = function(args) {
         // Arguments object
@@ -141,53 +181,6 @@ var jsCalendarYearMonth = (function(){
 
         // Return object
         return obj;
-    };
-
-    // Configurar el contenedor y añadir la clase automáticamente
-    JsCalendarYearMonth.prototype._setTarget = function(element) {
-        // Parse target
-        var target = jsCalendar.tools.getElement(element);
-        // If target not found
-        if (!target) {
-            // Throw an error
-            throw new Error('jsCalendar-yearmonthview: Target was not found.');
-        }
-        else {
-            // Save element
-            this._target = target;
-            this._target.classList.add('jsCalendar-yearmonth');
-
-            // Link object to list
-            var id = this._target.id;
-            if (id && id.length > 0) {
-                jsCalendarYearObjects['#' + id] = this;
-            }
-        }
-    };
-
-    // Init calendar
-    JsCalendarYearMonth.prototype._init = function(options) {
-        // Init elements object
-        this._elements = {};
-        // Almacenar las instancias de los calendarios
-        this._calendars = [];
-        // Events init
-        this._events = {};
-/*         this._events.date = [];
-        this._events.month = []; */
-        this._events.header_render = [];
-        this._events.title_render = [];
-        /* this._events.date_render = [];
-        this._events.month_render = [];
-        this._events.month_render = []; */
-        // Dates variables
-        this._now = null;
-        this._year = null;
-        this._selectedDates = [];
-
-        // Parse options
-        this._parseOptions(options);
-        this._selectedDates = this._options.selectedDates;
     };
     
     // Default options
@@ -263,6 +256,9 @@ var jsCalendarYearMonth = (function(){
         this._options.jsCalendarOptions.navigator = false;
         this._options.jsCalendarOptions.min = false;
         this._options.jsCalendarOptions.max = false;
+        if(this._options.jsCalendarOptions.language === 'undefined'){
+            this._options.jsCalendarOptions.language = 'en';
+        }
 
         // Load default and input local options
         for (item in JsCalendarYearMonth.options) {
@@ -408,6 +404,27 @@ var jsCalendarYearMonth = (function(){
 
     };
 
+    // Configurar el contenedor y añadir la clase automáticamente
+    JsCalendarYearMonth.prototype._setTarget = function(element) {
+        // Parse target
+        var target = jsCalendar.tools.getElement(element);
+        // If target not found
+        if (!target) {
+            // Throw an error
+            throw new Error('JsCalendarYearMonth: Target was not found.');
+        }
+        else {
+            // Save element
+            this._target = target;
+
+            // Link object to list
+            var id = this._target.id;
+            if (id && id.length > 0) {
+                jsCalendarYearObjects['#' + id] = this;
+            }
+        }
+    };
+
     // Init target
     JsCalendarYearMonth.prototype._initTarget = function() {
         // Add class
@@ -417,6 +434,26 @@ var jsCalendarYearMonth = (function(){
         this._target.className += 'jsCalendar-yearmonth';
 
     };
+
+    JsCalendarYearMonth.prototype._parseFunction = function(value,valuedefault) {
+        if (typeof valuedefault === 'undefined') {
+            valuedefault = null;
+        }
+        
+        if (typeof value !== 'undefined') {
+            if (
+                typeof value === 'string' &&
+                typeof window[value] === 'function'
+            ) {
+                return window[value];
+            }
+            // Passed as function
+            else if (typeof value === 'function') {
+                return value;
+            }
+        }
+        return valuedefault;
+    }
 
     JsCalendarYearMonth.prototype._parseBoolean = function(bool, valuedefault) {
         if (typeof valuedefault === 'undefined') {
@@ -480,7 +517,9 @@ var jsCalendarYearMonth = (function(){
         if (this._options.minYear === 0 && this._options.maxYear === 0) {
             return true;
         }
+
         year = this._parseYear(year,null);
+        
         if(year === null){
             return false;
         } else if (year === 0){
@@ -499,26 +538,6 @@ var jsCalendarYearMonth = (function(){
         return true;
     };
 
-    JsCalendarYearMonth.prototype._parseFunction = function(value,valuedefault) {
-        if (typeof valuedefault === 'undefined') {
-            valuedefault = null;
-        }
-        
-        if (typeof value !== 'undefined') {
-            if (
-                typeof value === 'string' &&
-                typeof window[value] === 'function'
-            ) {
-                return window[value];
-            }
-            // Passed as function
-            else if (typeof value === 'function') {
-                return value;
-            }
-        }
-        return valuedefault;
-    }
-
     // Set a Date
     JsCalendarYearMonth.prototype._setYear = function(newyear) {
         // Parse year
@@ -534,11 +553,15 @@ var jsCalendarYearMonth = (function(){
 
     // Método _renderHeader
     JsCalendarYearMonth.prototype._renderHeader = function(onPrevYear, onNextYear) {
-    
+
+        var onPrevYear = this._options.onPrevYear ? this._options.onPrevYear.bind(this) : this.previousYear.bind(this)
+        var onNextYear = this._options.onNextYear ? this._options.onNextYear.bind(this) : this.nextYear.bind(this);
+
         if (typeof this._options.renderHeader === 'function') {
             this._elements.head = this._options.renderHeader(this._year, onPrevYear, onNextYear);
 
-            if (this._options.yearNavigator) {
+            // TODO
+            /* if (this._options.yearNavigator) {
                 this._elements.navLeft = this._elements.head.getElementsByClassName('prev')[0];
                 if(this._elements.navLeft !== undefined){
                     this._elements.navLeft.onclick = onPrevYear;
@@ -547,7 +570,7 @@ var jsCalendarYearMonth = (function(){
                 if(this._elements.navRight !== undefined){
                     this._elements.navRight.onclick = onNextYear;
                 }
-            }
+            } */
 
             this._elements.title = this._elements.head.getElementsByClassName('year-title')[0];
                 
@@ -680,21 +703,6 @@ var jsCalendarYearMonth = (function(){
         }
     };
 
-    // Método _applyExtensions
-    JsCalendarYearMonth.prototype._applyExtensions = function(calendar) {
-        if (this._options.extensions && this._options.extensions.length > 0) {
-            this._options.extensions.forEach(function(ext) {
-                if (typeof jsCalendar.ext === 'function') {
-                    var originalUpdate = calendar._events.update;
-                    calendar._events.update = function(month) {
-                        originalUpdate.call(calendar, month);
-                        jsCalendar.ext(ext).update(calendar, month);
-                    };
-                }
-            });
-        }
-    };
-
     // Método _renderMonth
     JsCalendarYearMonth.prototype._renderMonth = function(wrapper, monthContainer, month) {
         // Aplicar las clases de tema especificadas
@@ -728,9 +736,7 @@ var jsCalendarYearMonth = (function(){
     JsCalendarYearMonth.prototype._create = function() {
         // Set created flag
         this._elements.created = true;
-        // Renderizar la cabecera
-        this._renderHeader(this._options.onPrevYear ? this._options.onPrevYear.bind(this) : this._prevYear.bind(this),
-                        this._options.onNextYear ? this._options.onNextYear.bind(this) : this._nextYear.bind(this));
+        this._renderHeader();
         this._target.appendChild(this._elements.head);
         
         // Renderizar el anuario
@@ -761,6 +767,22 @@ var jsCalendarYearMonth = (function(){
                 calendar = this._calendars[month];
                 calendar.goto(new Date(this._year, month, 1));
                 this._selectDatesForMonth(calendar, month + 1, this._selectedDates);
+            }
+        }
+    };
+
+    // Unselect all dates on calendar
+    JsCalendarYearMonth.prototype._unselectAllDates = function() {
+        // While not empty
+        while (this._selectedDates.length) {
+            this._selectedDates.pop();
+        }
+
+        var calendar;
+        if (this._calendars.length > 0) {
+            for (month = 0; month < 12; month++) {
+                calendar = this._calendars[month];
+                calendar.clearSelect();
             }
         }
     };
@@ -809,24 +831,139 @@ var jsCalendarYearMonth = (function(){
     // Un-select dates on month calendar
     JsCalendarYearMonth.prototype._unselectDatesForMonth = function(calendar, month, dates) {
 
-        var datesToSelect = dates.filter(function(date) {
+        dates = dates.filter(function(date) {
             var selectedDate = new Date(date);
-            return selectedDate.getFullYear() === this._year && (selectedDate.getMonth() + 1) === month;
+            return selectedDate.getFullYear() !== this._year || (selectedDate.getMonth() + 1) !== month;
         }, this);
 
-        if (datesToSelect.length > 0) {
-            var dateObjects = datesToSelect.map(function(date) {
-                return new Date(date);
-            });
-            calendar.select(dateObjects);
+        calendar.clearselect();
+    };
+
+    // Unselect all dates
+    // Podriamos personalizarla para que limpiase la selección de un mes en concreto o de un año en concreto.
+    JsCalendarYearMonth.prototype.clearSelect = function(){
+        // Unselect all dates
+        this._unselectAllDates();
+        // Refresh
+        this.refresh();
+
+        // Return
+        return this;
+    };
+
+    // Get selected dates
+    /**
+     * 
+     * @param {object} options {sort, type}
+     * sort	true	Sort in ascending order
+     * sort	"asc" | "desc"	Sort in ascending/descending order
+     * type	"timestamp"	Format dates as timestamp integer
+     * type	"date"	Format dates as javascript Date
+     * type	String with month format or day format	Format dates as custom string
+     * @returns Array
+     */
+    JsCalendarYearMonth.prototype.getSelected = function(options){
+        // Check if no options
+        if (typeof options !== 'object') {
+            options = {};
+        }
+
+        // Copy selected array
+        var dates = this._selectedDates.slice();
+
+        // Options - Sort array
+        if (options.sort) {
+            if (options.sort === true) {
+                dates.sort();
+            }
+            else if (typeof options.sort === 'string') {
+                if (options.sort.toLowerCase() === 'asc') {
+                    dates.sort();
+                }
+                else if (options.sort.toLowerCase() === 'desc'){
+                    dates.sort();
+                    dates.reverse();
+                }
+            }
+        }
+
+        // Options - Data type
+        if (options.type && typeof options.type === 'string') {
+            var i;
+            // Convert to date object
+            if (options.type.toLowerCase() === 'date'){
+                for (i = dates.length - 1; i >= 0; i--) {
+                    dates[i] = new Date(dates[i]);
+                }
+            }
+            // If not a timestamp - convert to custom format
+            else if (options.type.toLowerCase() !== 'timestamp') {
+                for (i = dates.length - 1; i >= 0; i--) {
+                    dates[i] = this._parseToDateString(new Date(dates[i]), options.type);
+                }
+            }
+        }
+
+        // Return dates
+        return dates;
+    };
+
+    // Check if date is selected
+    JsCalendarYearMonth.prototype.isSelected = function(date){
+        // If no arguments or null
+        if (typeof date === 'undefined' || date === null) {
+            // Return
+            return false;
+        }
+
+        // Parse date
+        date = jsCalendar.tools.parseDate(date);
+        date.setHours(0, 0, 0, 0);
+        date = date.getTime();
+
+        // If selected
+        if (this._selectedDates.indexOf(date) >= 0) {
+            return true;
+        }
+        // If not selected
+        else {
+            return false;
         }
     };
 
-    // Set Year
+    // Check if date is in active month
+    JsCalendarYearMonth.prototype.isInYear = function(date){
+        // If no arguments or null
+        if (typeof date === 'undefined' || date === null) {
+            // Return
+            return false;
+        }
+
+        // Parse date and get month
+        var year = jsCalendar.tools.parseDate(date);
+        year.setHours(0, 0, 0, 0);
+        year = year.setDate(1).getFullYear();
+        
+        // If same month
+        if (year === this._year) {
+            return true;
+        }
+        // Other month
+        else {
+            return false;
+        }
+    };
+
+    // Set Year - Hace "activo" el año indicado
     JsCalendarYearMonth.prototype.setYear = function(newYear) {
         const oldYear = this._year;
+        const oldnow = this._now;
         this._now = null;
+        
         this._setYear(newYear);
+
+        // Si el nuevo año es válido y es distinto al anterior
+        // actualizamos y dispachamos evento de cambio.
         if(this._now !== null && this._year !== oldYear){
             // Refresh
             this.refresh();
@@ -840,6 +977,8 @@ var jsCalendarYearMonth = (function(){
             if (typeof this._options.onYearChanged === 'function') {
                 this._options.onYearChanged(this._year, oldYear);
             }
+        } else if(this._year !== oldYear) {
+            this._now = oldnow;
         }
 
         return this;
@@ -943,6 +1082,20 @@ var jsCalendarYearMonth = (function(){
         return this;
     };
 
+    JsCalendarYearMonth.prototype.freeze = function() {
+        this._isFrozen = true;
+        return this;
+    };
+
+    JsCalendarYearMonth.prototype.unfreeze = function() {
+        this._isFrozen = false;
+        return this;
+    };
+
+    JsCalendarYearMonth.prototype.isFrozen = function() {
+        return this._isFrozen;
+    };
+
     // Refresh
     // Safe _update
     JsCalendarYearMonth.prototype.refresh = function(year) {
@@ -975,14 +1128,63 @@ var jsCalendarYearMonth = (function(){
         return this;
     };
 
-    // Método _prevYear
-    JsCalendarYearMonth.prototype._prevYear = function() {
+    // Reset to the date
+    JsCalendarYearMonth.prototype.reset = function(){
+        this.refresh(this._now);
+
+        // Return
+        return this;
+    };
+
+    // Método previousYear
+    JsCalendarYearMonth.prototype.previousYear = function() {
         this.setYear(this._year - 1);
     };
     
-    // Método _nextYear
-    JsCalendarYearMonth.prototype._nextYear = function() {
+    // Método nextYear
+    JsCalendarYearMonth.prototype.nextYear = function() {
         this.setYear(this._year + 1);
+    };
+
+    // Goto a year. "moverse" al año indicado (el año "activo" no varía)
+    // En una vista anual, tal vez, no tenga mucho sentido; dependerá.
+    JsCalendarYearMonth.prototype.gotoYear = function(year){
+        this.refresh(year);
+
+        // Return
+        return this;
+    };
+
+    // Set language
+    JsCalendarYearMonth.prototype.setLanguage = function(code) {
+        // Check if language exist
+        if (typeof code !== 'string'){
+            // Throw an error
+            throw new Error('JsCalendarYearMonth: Invalid language code.');
+        }
+
+        // Change language
+        if( this._options.jsCalendarOptions.language !== code)
+        {
+            if (this._calendars.length > 0) {
+                for (month = 0; month < 12; month++) {
+                    var calendar = this._calendars[month];
+                    calendar = calendar.setLanguage(code);
+                    if( month === 0){
+                        var language = calendar.languages[code];
+                        this._options.jsCalendarOptions.language = code;
+                        this._options.jsCalendarOptions.language.firstDayOfTheWeek = language.firstDayOfTheWeek;
+                        this._options.jsCalendarOptions.language.weekdaysShort = language.weekdaysShort;
+                        this._options.jsCalendarOptions.language.weekdaysMin = language.weekdaysMin;
+                    }
+                }
+                // Refresh calendar
+                this.refresh(); 
+            }
+        }
+
+        // Return
+        return this;
     };
     
     // Get a new object

@@ -32,6 +32,8 @@
 
     <div id="year-calendar"></div>
     
+    
+    <button id="my-button">Reset</button>
     <div id="year-calendar1"></div>
 
     <div id="year-calendar2"></div>
@@ -66,7 +68,7 @@
         yearCalendar.setYear(2030); */
 
         var yearCalendar1 = new jsCalendarYearMonth(document.getElementById('year-calendar1'),0, {
-            themeClasses: ['classic-theme', 'micro-theme', "red"],
+            themeClasses: ['classic-theme', 'micro-theme', "red"], language: 'es',
             yearNavigator: true, // Mostrar el navegador de años
             yearNavigatorPosition: 'left',
             navIcons: 'fontawesome', // You need to include both the font-awesome css file
@@ -85,6 +87,13 @@
 
         yearCalendar1.selectDates(['2024-01-30']);
         yearCalendar1.unselectDates(['2024-01-15', '2024-01-22', '2024-01-29']);
+        yearCalendar1.setLanguage('en');
+
+        var button = document.getElementById("my-button");
+        // Add a button event
+        button.addEventListener("click", function(){
+            yearCalendar1.reset();
+        }, false);
 
 // Simular un cambio de año
 //yearCalendar1.setYear(2020);
