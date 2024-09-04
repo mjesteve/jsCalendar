@@ -42,7 +42,7 @@ var jsCalendar = (function(){
     }
 
     // Version
-    JsCalendar.version = 'v1.4.6-beta';
+    JsCalendar.version = 'v1.4.7-beta';
 
     // Sub-Constructor
     JsCalendar.prototype._construct = function(args) {
@@ -1254,6 +1254,7 @@ var jsCalendar = (function(){
         this.language.dayStringParser = language._dayStringParser;
         // Init - (Hiedra)
         this.language.firstDayOfTheWeek = language.firstDayOfTheWeek;
+        this._options.firstDayOfTheWeek = language.firstDayOfTheWeek;
         this.language.weekdaysShort = language.weekdaysShort;
         this.language.weekdaysMin = language.weekdaysMin;
         // End - (Hiedra)
