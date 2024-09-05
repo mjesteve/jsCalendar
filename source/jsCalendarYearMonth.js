@@ -1,5 +1,5 @@
 /*
- * jsCalendarYearMonth v0.1.3-beta
+ * jsCalendarYearMonth v0.1.4-beta.1
  * 
  * 
  * MIT License
@@ -552,25 +552,25 @@ var jsCalendarYearMonth = (function(){
     };
 
     // Método _renderHeader
-    JsCalendarYearMonth.prototype._renderHeader = function(onPrevYear, onNextYear) {
+    JsCalendarYearMonth.prototype._renderHeader = function() {
 
         var onPrevYear = this._options.onPrevYear ? this._options.onPrevYear.bind(this) : this.previousYear.bind(this)
         var onNextYear = this._options.onNextYear ? this._options.onNextYear.bind(this) : this.nextYear.bind(this);
 
         if (typeof this._options.renderHeader === 'function') {
-            this._elements.head = this._options.renderHeader(this._year, onPrevYear, onNextYear);
+            this._elements.head = this._options.renderHeader(this._year);
 
             // TODO
-            /* if (this._options.yearNavigator) {
+            if (this._options.yearNavigator) {
                 this._elements.navLeft = this._elements.head.getElementsByClassName('prev')[0];
-                if(this._elements.navLeft !== undefined){
+                /* if(this._elements.navLeft !== undefined){
                     this._elements.navLeft.onclick = onPrevYear;
-                }
+                } */
                 this._elements.navRight = this._elements.head.getElementsByClassName('next')[0];
-                if(this._elements.navRight !== undefined){
+                /* if(this._elements.navRight !== undefined){
                     this._elements.navRight.onclick = onNextYear;
-                }
-            } */
+                } */
+            }
 
             this._elements.title = this._elements.head.getElementsByClassName('year-title')[0];
                 
@@ -711,8 +711,7 @@ var jsCalendarYearMonth = (function(){
         });
 
         var calendar = jsCalendar.new(monthContainer, 0, this._options.jsCalendarOptions);
-        //calendar.goto(new Date(this._year, month, 1));
-
+        
         // Add target listeners
         var parent = this;
         // Calendar click handler
@@ -977,7 +976,7 @@ var jsCalendarYearMonth = (function(){
             if (typeof this._options.onYearChanged === 'function') {
                 this._options.onYearChanged(this._year, oldYear);
             }
-        } else if(this._year !== oldYear) {
+        } else {
             this._now = oldnow;
         }
 

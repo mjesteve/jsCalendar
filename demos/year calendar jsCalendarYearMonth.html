@@ -42,7 +42,7 @@
 
     <script type="text/javascript">
         // Instanciar el componente jsCalendarYearMonth
-        /* var calendarElement = document.getElementById('year-calendar');
+        var calendarElement = document.getElementById('year-calendar');
         // Crear el calendario anual
         var yearCalendar = new jsCalendarYearMonth(calendarElement, 0,{
             themeClasses: ["red"], year: 2019,
@@ -50,22 +50,28 @@
             yearNavigatorPosition: 'left',
             navIcons: 'fontawesome', // You need to include both the font-awesome css file
             fontawesomePrefix: 'fa', //ver. 4.7
+            monthFormat: "month YYYY",
             selectedDates: ['2024-01-15', '2024-01-22', '03-02-2024'],
             customYearTitle: function(year) {
                 return "Año: " + year + '<strong> (FontAwesome 4.7) </strong>';  // Ejemplo de personalización
             },
             minYear: 2020, maxYear: 2025,
             onPrevYear: function() {
-                this.setYear(this._year - 1);
+                this.setYear(this._year - 2);
             },
             onNextYear: function() {
-                this.setYear(this._year + 1);
+                this.setYear(this._year + 2);
             },
-            monthFormat: "month YYYY",
+            onYearChanged: function(newYear, oldYear) {
+                console.log("El año ha cambiado a:", newYear, oldYear);
+            },
+            onDateClick: function(event, date) {
+                console.log("Day click:", jsCalendar.tools.dateToString(date, 'DAY, DD MONTH YYYY', 'es'));
+            },
         });
 
         // Simular un cambio de año
-        yearCalendar.setYear(2030); */
+        //yearCalendar.setYear(2030);
 
         var yearCalendar1 = new jsCalendarYearMonth(document.getElementById('year-calendar1'),0, {
             themeClasses: ['classic-theme', 'micro-theme', "red"], language: 'es',
@@ -77,12 +83,37 @@
             responsiveLayout: false,
             monthsPerRow: 4,
             minYear: 2020, maxYear: 2025,
-            onPrevYear: function() {
-                this.setYear(this._year - 1);
+            renderHeader: function(year) {
+                // Crear un elemento de cabecera personalizado
+                var customHeader = document.createElement('div');
+                customHeader.className = 'custom-year-header';
+
+                // Añadir un título personalizado
+                var title = document.createElement('h1');
+                title.className = 'year-title';
+                title.textContent = 'Calendario de ' + year;
+                customHeader.appendChild(title);
+
+                // Añadir otros elementos personalizados
+                var subtitle = document.createElement('p');
+                subtitle.textContent = '¡Personaliza este calendario a tu gusto!';
+                customHeader.appendChild(subtitle);
+
+                return customHeader;
             },
-            onNextYear: function() {
-                this.setYear(this._year + 1);
-            }
+        });
+
+        // Capturar el evento onYearChanged
+        calendarElement1 = document.getElementById('year-calendar1');
+        calendarElement1.addEventListener('onYearChanged', function(event) {
+            var newYear = event.detail.newYear;
+            console.log("El año ha cambiado a:", newYear, event.detail.oldYear);            
+        });
+
+        calendarElement1.addEventListener('onDateClick', function(event) {
+            // event = { event:PointerEvent jsCalendar, date:xxx}
+            console.log("Day click:", jsCalendar.tools.dateToString(event.detail.date, 'DAY, DD MONTH YYYY', 'es'),
+        );
         });
 
         yearCalendar1.selectDates(['2024-01-30']);
