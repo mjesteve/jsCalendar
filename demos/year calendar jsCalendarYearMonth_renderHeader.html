@@ -138,6 +138,11 @@
             console.log("Day click:", event.detail.date);
             var print_date = document.getElementById("my-input-a");
             print_date.value = jsCalendar.tools.dateToString(event.detail.date, 'DAY, DD MONTH YYYY', 'es');
+                if(yearCalendar.isSelected(event.detail.date)){
+                    yearCalendar.unselectDates([event.detail.date]);
+                }else{
+                    yearCalendar.selectDates([event.detail.date]);
+                }
         });
 
         // Simular un cambio de año
@@ -162,12 +167,17 @@
                 // Aquí se puede agregar cualquier lógica adicional que se quiera ejecutar cuando el año cambie.
                 var print_date = document.getElementById("my-input-a2");
 				print_date.value = jsCalendar.tools.dateToString(date, 'DAY, DD MONTH YYYY', 'es');
+                if(this.isSelected(date)){
+                    this.unselectDates([date]);
+                }else{
+                    this.selectDates([date]);
+                }
             }
         });
 
         // Actualizar las fechas seleccionadas después de crear el componente
         setTimeout(function() {
-            yearCalendar2.setSelectedDates(['2024-02-14', '2024-06-18', '2024-12-25']);
+            yearCalendar2.selectDates(['2024-02-14', '2024-06-18', '2024-12-25']);
         }, 5000); // Actualiza las fechas después de 5 segundos
 
     </script>

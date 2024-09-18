@@ -42,7 +42,7 @@ var jsCalendarYearMonth = (function(){
     }
 
     // Version
-    JsCalendarYearMonth.version = 'v0.1.4-beta.1';
+    JsCalendarYearMonth.version = 'v0.1.4-beta.2';
 
     // Sub-Constructor
     JsCalendarYearMonth.prototype._construct = function(args) {
@@ -840,7 +840,7 @@ var jsCalendarYearMonth = (function(){
 
     // Unselect all dates
     // Podriamos personalizarla para que limpiase la selección de un mes en concreto o de un año en concreto.
-    JsCalendarYearMonth.prototype.clearSelect = function(){
+    JsCalendarYearMonth.prototype.clearSelectDates = function(){
         // Unselect all dates
         this._unselectAllDates();
         // Refresh
@@ -918,14 +918,15 @@ var jsCalendarYearMonth = (function(){
         // Parse date
         date = jsCalendar.tools.parseDate(date);
         date.setHours(0, 0, 0, 0);
-        date = date.getTime();
-
+        var index = this._selectedDates.findIndex(function(dt) {
+            return dt.getTime() === date.getTime();
+        });
         // If selected
-        if (this._selectedDates.indexOf(date) >= 0) {
+        if (index >= 0) {
             return true;
         }
-        // If not selected
         else {
+        // If not selected
             return false;
         }
     };

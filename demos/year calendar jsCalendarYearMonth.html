@@ -116,8 +116,11 @@
         );
         });
 
-        yearCalendar1.selectDates(['2024-01-30']);
-        yearCalendar1.unselectDates(['2024-01-15', '2024-01-22', '2024-01-29']);
+        yearCalendar1.selectDates([new Date(2024,0,23,0,0,0)]);
+        if(yearCalendar1.isSelected(new Date(2024,0,15,0,0,0))){
+            yearCalendar1.unselectDates([new Date(2024,0,15,0,0,0)]);
+        }
+        yearCalendar1.unselectDates([new Date(2024,0,15,0,0,0), new Date(2024,0,22,0,0,0), new Date(2024,0,29,0,0,0)]);
         yearCalendar1.setLanguage('en');
 
         var button = document.getElementById("my-button");
