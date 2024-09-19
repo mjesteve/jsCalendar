@@ -873,15 +873,15 @@ var jsCalendarYearMonth = (function(){
         // Options - Sort array
         if (options.sort) {
             if (options.sort === true) {
-                dates.sort();
+                dates.sort((a, b) => a - b);
             }
             else if (typeof options.sort === 'string') {
                 if (options.sort.toLowerCase() === 'asc') {
-                    dates.sort();
+                    dates.sort((a, b) => a.getTime() - b.getTime());
                 }
                 else if (options.sort.toLowerCase() === 'desc'){
-                    dates.sort();
-                    dates.reverse();
+                    dates.sort((a, b) => b.getTime() - a.getTime());
+                    // dates.reverse();
                 }
             }
         }
